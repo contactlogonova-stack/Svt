@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SVT BAC1 Togo – Révision Ultime</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --card: #1a2235;
+    --border: #1f2d45;
+    --accent: #00e5ff;
+    --green: #00ff9d;
+    --orange: #ff6b35;
+    --purple: #a78bfa;
+    --yellow: #ffd60a;
+    --red: #ff4757;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --font: 'Sora', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BG EFFET */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 20%, rgba(0,229,255,0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(167,139,250,0.04) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,14,26,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+  }
+
+  .logo {
+    font-weight: 800;
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+  }
+  .logo span { color: var(--accent); }
+
+  .exam-badge {
+    background: linear-gradient(135deg, var(--red), #c0392b);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    animation: pulse-badge 2s infinite;
+  }
+  @keyframes pulse-badge {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,71,87,0.4); }
+    50% { box-shadow: 0 0 0 8px rgba(255,71,87,0); }
+  }
+
+  /* TIMER */
+  #timer-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.82rem;
+  }
+  .timer-label { color: var(--muted); }
+  .timer-val {
+    font-family: var(--mono);
+    color: var(--yellow);
+    font-weight: 700;
+    font-size: 1rem;
+  }
+  .progress-outer {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--green));
+    border-radius: 2px;
+    transition: width 1s linear;
+  }
+
+  /* NAV COURS */
+  nav {
+    display: flex;
+    gap: 8px;
+    padding: 16px 24px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: relative;
+    z-index: 1;
+  }
+  nav::-webkit-scrollbar { display: none; }
+
+  .nav-btn {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    font-family: var(--font);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .nav-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #000;
+  }
+
+  /* MAIN */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px 16px 80px;
+  }
+
+  /* SECTION */
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* SECTION HEADER */
+  .section-header {
+    padding: 24px 0 16px;
+  }
+  .section-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .section-sub {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: #2d3f5a; }
+
+  .card-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* KEY POINTS */
+  .key-list { list-style: none; }
+  .key-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .key-list li:last-child { border-bottom: none; }
+  .key-list li::before {
+    content: '▸';
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+    font-size: 0.75rem;
+  }
+
+  /* FORMULE BOX */
+  .formula-box {
+    background: rgba(0,229,255,0.06);
+    border: 1px solid rgba(0,229,255,0.2);
+    border-radius: 8px;
+    padding: 14px 16px;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    margin: 12px 0;
+    line-height: 1.8;
+    color: var(--accent);
+  }
+
+  /* IMPORTANT BADGE */
+  .important {
+    background: rgba(255,214,10,0.08);
+    border-left: 3px solid var(--yellow);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.84rem;
+    margin: 10px 0;
+  }
+  .important strong { color: var(--yellow); }
+
+  .hot {
+    background: rgba(255,71,87,0.08);
+    border-left: 3px solid var(--red);
+    padding: 10px 14px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.84rem;
+    margin: 10px 0;
+  }
+  .hot strong { color: var(--red); }
+
+  /* TABLE */
+  .table-wrap { overflow-x: auto; margin: 12px 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  th {
+    background: rgba(255,255,255,0.04);
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  .quiz-q {
+    font-size: 0.95rem;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+  .quiz-num {
+    font-family: var(--mono);
+    color: var(--accent);
+    font-size: 0.75rem;
+    margin-bottom: 8px;
+    font-weight: 700;
+  }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .opt-btn {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    color: var(--text);
+    font-family: var(--font);
+    font-size: 0.84rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .opt-btn:hover:not(:disabled) { border-color: var(--accent); background: rgba(0,229,255,0.05); }
+  .opt-btn.correct { background: rgba(0,255,157,0.12); border-color: var(--green); color: var(--green); }
+  .opt-btn.wrong { background: rgba(255,71,87,0.12); border-color: var(--red); color: var(--red); }
+  .opt-btn:disabled { cursor: default; }
+
+  .explication {
+    display: none;
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(0,229,255,0.05);
+    border-radius: 8px;
+    font-size: 0.83rem;
+    line-height: 1.6;
+    color: var(--text);
+    border-left: 2px solid var(--accent);
+  }
+  .explication.show { display: block; animation: fadeIn 0.2s ease; }
+
+  .quiz-nav {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  /* FLASHCARDS */
+  .flashcard-wrap {
+    perspective: 1000px;
+    cursor: pointer;
+    margin-bottom: 12px;
+  }
+  .flashcard-inner {
+    position: relative;
+    width: 100%;
+    min-height: 160px;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+  }
+  .flashcard-wrap.flipped .flashcard-inner { transform: rotateY(180deg); }
+  .fc-front, .fc-back {
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 24px;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+  .fc-front {
+    background: var(--card);
+    border: 1px solid var(--border);
+    flex-direction: column;
+    gap: 8px;
+  }
+  .fc-back {
+    background: linear-gradient(135deg, rgba(0,229,255,0.1), rgba(167,139,250,0.1));
+    border: 1px solid rgba(0,229,255,0.3);
+    transform: rotateY(180deg);
+    font-size: 0.88rem;
+  }
+  .fc-hint {
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .fc-question { font-weight: 700; font-size: 1rem; }
+  .fc-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 12px;
+  }
+  .fc-counter {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  /* SCORE */
+  .score-display {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--green);
+    font-weight: 700;
+  }
+
+  /* BUTTONS */
+  .btn {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    font-family: var(--font);
+    font-size: 0.84rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #000;
+  }
+  .btn-primary:hover { background: #00b8cc; }
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
+
+  /* GRID */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* PROGRESS TRACKER */
+  .tracker-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+  }
+  .tracker-check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+  }
+  .tracker-check.done {
+    background: var(--green);
+    border-color: var(--green);
+    color: #000;
+  }
+
+  /* SCHEMA SVG-LIKE */
+  .schema {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    margin: 12px 0;
+    font-size: 0.78rem;
+    font-family: var(--mono);
+    line-height: 2;
+    text-align: center;
+    color: var(--muted);
+  }
+  .schema .label { color: var(--accent); font-weight: 700; }
+  .schema .arrow { color: var(--purple); }
+
+  /* ACCORDION */
+  .accordion { margin-bottom: 8px; }
+  .acc-header {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 0.88rem;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .acc-header:hover { border-color: var(--accent); }
+  .acc-header.open { border-color: var(--accent); border-radius: 8px 8px 0 0; }
+  .acc-icon { transition: transform 0.3s; color: var(--muted); }
+  .acc-header.open .acc-icon { transform: rotate(180deg); color: var(--accent); }
+  .acc-body {
+    background: rgba(0,229,255,0.03);
+    border: 1px solid var(--accent);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 0 16px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+  }
+  .acc-body.open { max-height: 1000px; padding: 16px; }
+
+  /* TAG */
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tag-hot { background: rgba(255,71,87,0.15); color: var(--red); }
+  .tag-key { background: rgba(0,229,255,0.15); color: var(--accent); }
+  .tag-def { background: rgba(167,139,250,0.15); color: var(--purple); }
+
+  /* RESULT */
+  .result-box {
+    text-align: center;
+    padding: 32px;
+    background: var(--card);
+    border-radius: 16px;
+    border: 1px solid var(--border);
+    margin-top: 20px;
+  }
+  .result-score {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    font-family: var(--mono);
+  }
+  .result-msg { font-size: 1rem; color: var(--muted); margin-top: 8px; }
+
+  /* HOME CARDS */
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 20px;
+  }
+  .home-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .home-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .home-card-icon { font-size: 1.8rem; margin-bottom: 10px; }
+  .home-card-title { font-weight: 700; font-size: 0.88rem; margin-bottom: 4px; }
+  .home-card-sub { font-size: 0.75rem; color: var(--muted); }
+
+  .hero {
+    padding: 32px 0 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+  .hero-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+  .hero-title span { color: var(--accent); }
+  .hero-sub { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+
+  .stats-row {
+    display: flex;
+    gap: 16px;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .stat-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+    flex: 1;
+    min-width: 100px;
+    text-align: center;
+  }
+  .stat-val {
+    font-family: var(--mono);
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--accent);
+  }
+  .stat-lbl { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+
+  /* SCROLL PROGRESS */
+  #scroll-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: var(--accent);
+    z-index: 999;
+    transition: width 0.1s;
+  }
+
+  /* MINI TAG INLINE */
+  em.kw { color: var(--yellow); font-style: normal; font-weight: 700; }
+  em.def { color: var(--purple); font-style: normal; }
+</style>
+</head>
+<body>
+
+<div id="scroll-bar"></div>
+
+<header>
+  <div class="logo">SVT<span>·</span>BAC1</div>
+  <div class="score-display" id="global-score">🏆 <span id="score-num">0</span> pts</div>
+  <div class="exam-badge">📅 EXAMEN MARDI</div>
+</header>
+
+<div id="timer-bar">
+  <span class="timer-label">Temps de révision :</span>
+  <span class="timer-val" id="timer-display">00:00:00</span>
+  <div class="progress-outer"><div class="progress-inner" id="day-progress" style="width:0%"></div></div>
+  <span style="font-size:0.75rem;color:var(--muted)">Objectif: 8h/jour</span>
+</div>
+
+<nav>
+  <button class="nav-btn active" onclick="showSection('home')">🏠 Accueil</button>
+  <button class="nav-btn" onclick="showSection('c1')">🔬 Organisation cellulaire</button>
+  <button class="nav-btn" onclick="showSection('c2')">🧪 Chimie du vivant</button>
+  <button class="nav-btn" onclick="showSection('c3')">💧 Échanges cellulaires</button>
+  <button class="nav-btn" onclick="showSection('c4')">🩸 Cellules sanguines</button>
+  <button class="nav-btn" onclick="showSection('c5')">🌍 Géologie Togo</button>
+  <button class="nav-btn" onclick="showSection('quiz')">❓ Quiz BAC</button>
+  <button class="nav-btn" onclick="showSection('flash')">🃏 Flashcards</button>
+  <button class="nav-btn" onclick="showSection('tracker')">✅ Mon Progrès</button>
+</nav>
+
+<main>
+
+<!-- ===== HOME ===== -->
+<div class="section active" id="home">
+  <div class="hero">
+    <div class="hero-title">Révision <span>BAC1</span> SVT<br>Togo 🇹🇬</div>
+    <div class="hero-sub">Tout l'essentiel de tes 7 leçons analysé depuis tes cours. Focus sur ce qui <strong>sort à coup sûr</strong> à l'examen mardi.</div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-item"><div class="stat-val">5</div><div class="stat-lbl">Leçons clés</div></div>
+    <div class="stat-item"><div class="stat-val">30</div><div class="stat-lbl">Questions quiz</div></div>
+    <div class="stat-item"><div class="stat-val">25</div><div class="stat-lbl">Flashcards</div></div>
+    <div class="stat-item"><div class="stat-val">15</div><div class="stat-lbl">Objectif /20</div></div>
+  </div>
+
+  <div class="hot" style="margin-bottom:16px">
+    <strong>🎯 PRIORITÉ ABSOLUE pour mardi :</strong><br>
+    Respiration cellulaire · Division cellulaire (mitose/méiose) · Organisation de la cellule · Échanges cellulaires (osmose, diffusion)
+  </div>
+
+  <div class="home-grid">
+    <div class="home-card" onclick="showSection('c1')">
+      <div class="home-card-icon">🔬</div>
+      <div class="home-card-title">Organisation cellulaire</div>
+      <div class="home-card-sub">Structure, organites, ultrastructure</div>
+    </div>
+    <div class="home-card" onclick="showSection('c2')">
+      <div class="home-card-icon">🧪</div>
+      <div class="home-card-title">Chimie du vivant</div>
+      <div class="home-card-sub">Glucides, lipides, protides</div>
+    </div>
+    <div class="home-card" onclick="showSection('c3')">
+      <div class="home-card-icon">💧</div>
+      <div class="home-card-title">Échanges cellulaires</div>
+      <div class="home-card-sub">Osmose, diffusion, transport actif</div>
+    </div>
+    <div class="home-card" onclick="showSection('c4')">
+      <div class="home-card-icon">🩸</div>
+      <div class="home-card-title">Cellules sanguines</div>
+      <div class="home-card-sub">Hématies, leucocytes, plaquettes</div>
+    </div>
+    <div class="home-card" onclick="showSection('c5')">
+      <div class="home-card-icon">🌍</div>
+      <div class="home-card-title">Géologie du Togo</div>
+      <div class="home-card-sub">4 formations géologiques</div>
+    </div>
+    <div class="home-card" onclick="showSection('quiz')">
+      <div class="home-card-icon">❓</div>
+      <div class="home-card-title">Quiz BAC</div>
+      <div class="home-card-sub">30 questions type examen</div>
+    </div>
+    <div class="home-card" onclick="showSection('flash')">
+      <div class="home-card-icon">🃏</div>
+      <div class="home-card-title">Flashcards</div>
+      <div class="home-card-sub">Mémorisation rapide</div>
+    </div>
+    <div class="home-card" onclick="showSection('tracker')">
+      <div class="home-card-icon">✅</div>
+      <div class="home-card-title">Mon Progrès</div>
+      <div class="home-card-sub">Suivi de révision</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== C1 : ORGANISATION CELLULAIRE ===== -->
+<div class="section" id="c1">
+  <div class="section-header">
+    <div class="section-tag">Leçon 1</div>
+    <div class="section-title">🔬 Organisation de la Cellule</div>
+    <div class="section-sub">Cytologie · Ultrastructure · Organites · Comparaison cellules</div>
+  </div>
+
+  <div class="hot"><strong>🔥 TRÈS PROBABLE À L'EXAMEN :</strong> Schéma annoté de la cellule animale/végétale, rôles des organites, comparaison cellule procaryote/eucaryote</div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">📌 Définitions fondamentales <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li><strong>Cellule</strong> = unité structurale et fonctionnelle de tout être vivant</li>
+        <li><strong>Cytologie</strong> = science qui étudie les cellules</li>
+        <li><em class="kw">Cellule eucaryote</em> = cellule avec un noyau différencié (ex : paramécie, cellule animale/végétale)</li>
+        <li><em class="kw">Cellule procaryote</em> = cellule unicellulaire SANS noyau différencié (ex : bactérie)</li>
+        <li><strong>Microscope optique</strong> = montre la structure entière (ex : noyau visible)</li>
+        <li><strong>Microscope électronique</strong> = montre l'ultrastructure (organites détaillés)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🏗️ Parties de la cellule et leurs rôles <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Organite</th><th>Description</th><th>Rôle(s)</th></tr>
+          <tr><td><em class="kw">Membrane plasmique</em></td><td>2 zones sombres + 1 zone claire</td><td>Protège la cellule · Contrôle les échanges · Forme les sillons de division</td></tr>
+          <tr><td><em class="kw">Paroi pecto-cellulosique</em></td><td>Spécifique aux végétaux · pectine + cellulose</td><td>Protège contre l'éclatement · Liaison entre cellules · Élaboration phloème</td></tr>
+          <tr><td><em class="kw">Cytoplasme</em></td><td>Hyaloplasme + organites + inclusions</td><td>Siège des réactions cellulaires · Lieu des mouvements des organites</td></tr>
+          <tr><td><em class="kw">Réticulum Endoplasmique Granuleux (REG)</em></td><td>Porte des ribosomes</td><td>Siège de la synthèse des protéines + transport</td></tr>
+          <tr><td><em class="kw">Réticulum Endoplasmique Lisse (REL)</em></td><td>Sans ribosomes</td><td>Synthèse des composés lipidiques + glycogène</td></tr>
+          <tr><td><em class="kw">Appareil de Golgi</em></td><td>Ensemble des dictyosomes</td><td>Lieu de stockage, emballage et transport des produits de synthèse</td></tr>
+          <tr><td><em class="kw">Mitochondrie</em></td><td>2 membranes (interne + externe)</td><td>Siège des oxydations cellulaires · Fournit l'ATP = énergie</td></tr>
+          <tr><td><em class="kw">Chloroplaste</em></td><td>Spécifique aux végétaux · 2 membranes</td><td>Assure la photosynthèse</td></tr>
+          <tr><td><em class="kw">Ribosomes</em></td><td>ARNr + protéines · 2 sous-unités</td><td>Synthèse des protéines (protéosynthèse)</td></tr>
+          <tr><td><em class="kw">Vacuoles</em></td><td>Poches délimitées par tonoplaste</td><td>Responsables de la turgescence et plasmolyse</td></tr>
+          <tr><td><em class="kw">Noyau</em></td><td>Entouré membrane nucléaire · nucléoplasme + chromatine + nucléole</td><td>Entretient la vie · Division cellulaire · Transmission caractères héréditaires</td></tr>
+          <tr><td><em class="kw">Centrosome</em></td><td>2 centrioles perpendiculaires · spécifique cellules animales</td><td>Forme les asters lors des divisions · Origine flagelles et cils</td></tr>
+          <tr><td><em class="kw">Lysosomes</em></td><td>Vésicules à enzymes digestives</td><td>Digestion intracellulaire</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">📊 Comparaison Cellule Animale vs Végétale <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Caractéristique</th><th>Cellule Animale</th><th>Cellule Végétale</th></tr>
+          <tr><td>Membrane plasmique</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Cytoplasme</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Noyau</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Mitochondries</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Réticulum + Golgi</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Centrosome</td><td>✅</td><td>❌</td></tr>
+          <tr><td>Paroi pecto-cellulosique</td><td>❌</td><td>✅</td></tr>
+          <tr><td>Chloroplastes</td><td>❌</td><td>✅</td></tr>
+          <tr><td>Grandes vacuoles</td><td>❌ (petites)</td><td>✅ (grandes)</td></tr>
+          <tr><td>Plasmodesmes</td><td>❌</td><td>✅</td></tr>
+          <tr><td>Inclusions</td><td>Glycogène, lipides</td><td>Huile, essences</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🧫 La Paramécie (unicellulaire animale) <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li>Membrane plasmique avec <em class="kw">entonnoir buccal</em></li>
+        <li>Cytoplasme avec 2 types de vacuoles : <em class="kw">digestives</em> (digestion) et <em class="kw">pulsatiles</em> (osmorégulation)</li>
+        <li>Cils vibratiles autour de la membrane</li>
+        <li>Deux noyaux : <em class="kw">micronucleus</em> (petit) + <em class="kw">macronucleus</em> (gros)</li>
+        <li>Réserves de glycogène (colorées brun acajou à l'iode)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="important"><strong>💡 Annotation à savoir par cœur :</strong><br>
+  Cellule animale (17 structures) : REG (1), Membrane nucléaire (2), Nucléoplasme (3), Pore nucléaire (4), Nucléole (5), Chromatine (6), Noyau (7), REL (8), Gouttelettes lipidiques (9), Appareil de Golgi (10), Vacuole (11), Membrane plasmique (12), Mitochondrie (13), Cytoplasme (14), Centrosome (15), Lysosome (16), Ribosome (17)</div>
+</div>
+
+<!-- ===== C2 : CHIMIE DU VIVANT ===== -->
+<div class="section" id="c2">
+  <div class="section-header">
+    <div class="section-tag">Leçon 2</div>
+    <div class="section-title">🧪 Chimie du Vivant</div>
+    <div class="section-sub">Glucides · Lipides · Protides · État physico-chimique</div>
+  </div>
+
+  <div class="hot"><strong>🔥 TRÈS PROBABLE :</strong> Formules des glucides, réaction d'estérification/saponification des lipides, liaison peptidique des protides</div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🍬 1. Les Glucides (Osides) <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Groupe</th><th>Exemple</th><th>Formule</th></tr>
+          <tr><td>Hexoses (oses)</td><td>Glucose, Galactose, Fructose</td><td>C₆H₁₂O₆</td></tr>
+          <tr><td>Pentoses (oses)</td><td>Ribose, Désoxyribose</td><td>C₅H₁₀O₅</td></tr>
+          <tr><td>Diholosides</td><td>Maltose, Lactose, Saccharose</td><td>C₁₂H₂₂O₁₁</td></tr>
+          <tr><td>Polyosides</td><td>Amidon, Glycogène</td><td>(C₆H₁₀O₅)n · masse 40 000 à 200 000</td></tr>
+          <tr><td>Hétérosides</td><td>Cellulose, Anthocyane</td><td>Glucides + groupes non glucidiques</td></tr>
+        </table>
+      </div>
+      <div class="formula-box">
+        Condensation : C₆H₁₂O₆ + C₆H₁₂O₆ → C₁₂H₂₂O₁₁ + H₂O<br>
+        Formation du maltose : 2 glucose → maltose<br>
+        Formation du lactose : glucose + galactose → lactose<br>
+        Formation du saccharose : glucose + fructose → saccharose
+      </div>
+      <div class="important"><strong>NB :</strong> Les glucides contiennent C, H, O · formule générale : CₙH₂ₙOₙ<br>Ils sont solubles dans l'eau et constituent les réserves d'énergie.</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🫙 2. Les Lipides <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li>Constituants des corps gras · <em class="kw">Insolubles dans l'eau</em> · forment une émulsion instable</li>
+        <li>Solubles dans les solvants organiques (benzène, acétone, éther)</li>
+        <li>Laissent une tache translucide sur papier</li>
+        <li>Onctueux au toucher</li>
+      </ul>
+      <div class="formula-box">
+        Molécule de base : acide gras (R-COOH) + alcool (R'-OH)<br><br>
+        🔵 Réaction d'ESTÉRIFICATION :<br>
+        R-COOH + HO-R' → R-COO-R' + H₂O<br>
+        (acide gras + alcool → ester (lipide) + eau)<br><br>
+        🔴 Réaction de SAPONIFICATION :<br>
+        R-COO-R' + NaOH → R-COO-Na + R'-OH<br>
+        (ester + soude → savon de soude + alcool)
+      </div>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Groupe</th><th>Constitution</th><th>Exemples</th></tr>
+          <tr><td>Lipides simples - Glycérides</td><td>Glycérol + acides gras</td><td>Palmitine, Stéarine, Oléine</td></tr>
+          <tr><td>Lipides simples - Stérides</td><td>Stérols + acides gras</td><td>Cholestérol</td></tr>
+          <tr><td>Lipides complexes</td><td>Alcools + acides gras + azote + phosphore</td><td>Myéline, Lécithine</td></tr>
+        </table>
+      </div>
+      <div class="important"><strong>Acides gras saturés :</strong> structure linéaire · Ex: acide palmitique CH₃-(CH₂)₁₄-COOH (C₁₆), acide stéarique (C₁₈)<br>
+      <strong>Acides gras insaturés :</strong> au moins une double liaison · Ex: acide oléique, linoléique</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🔬 3. Les Protides <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Groupe</th><th>Constitution</th><th>Type/Exemples</th><th>Masse molaire</th></tr>
+          <tr><td>Acides aminés</td><td>NH₂-CH-COOH (+ R)</td><td>Alanine</td><td>89</td></tr>
+          <tr><td>Polypeptides</td><td>Quelques dizaines d'acides aminés</td><td>Sécrétine</td><td>5 000</td></tr>
+          <tr><td>Holoprotéines</td><td>Nombreux acides aminés</td><td>Ovalbumine</td><td>Quelques dizaines à centaines de milliers</td></tr>
+          <tr><td>Hétéroprotéines</td><td>Acides aminés + groupes non protidiques</td><td>Hémoglobine · Nucléoprotéines (ADN, ARN)</td><td>68 000 / Plusieurs millions</td></tr>
+        </table>
+      </div>
+      <div class="formula-box">
+        Liaison peptidique (condensation) :<br>
+        H₂N-CH-COOH + H₂N-CH-COOH → H₂N-CH-CO-NH-CH-COOH + H₂O<br>
+        (acide aminé 1 + acide aminé 2 → dipeptide + eau)
+      </div>
+      <ul class="key-list">
+        <li>La <em class="kw">dénaturation</em> des protéines est irréversible : chaleur, acides, bases peuvent la provoquer</li>
+        <li>La <em class="kw">coagulation</em> est la précipitation des protéines en présence d'eau</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">💧 4. État physico-chimique de la matière vivante <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li><em class="kw">Solution vraie</em> : mélange homogène soluté + solvant · Ex: eau + sels minéraux</li>
+        <li><em class="kw">Solution colloïdale</em> : mélange hétérogène, translucide et non coagulant · Ex: amidon + eau chaude</li>
+        <li><em class="kw">Émulsion</em> : mélange lipides + eau (instable)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== C3 : ÉCHANGES CELLULAIRES ===== -->
+<div class="section" id="c3">
+  <div class="section-header">
+    <div class="section-tag">Leçon 3</div>
+    <div class="section-title">💧 Échanges Cellulaires</div>
+    <div class="section-sub">Osmose · Diffusion · Transport actif · Endocytose · Exocytose</div>
+  </div>
+
+  <div class="hot"><strong>🔥 TRÈS PROBABLE :</strong> Calcul de pression osmotique, expériences de plasmolyse/déplasmolyse, types de transport</div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🧮 Pression Osmotique (Formule essentielle) <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <div class="formula-box">
+        Po = π = i·R·n·T = i·R·C·T<br><br>
+        Ou : Po = i·R·C·T / M<br><br>
+        📌 Légende :<br>
+        Po / π = pression osmotique (en Atm, bar, Pa)<br>
+        i = coefficient d'ionisation du soluté<br>
+        R = 0,082 (constante de proportionnalité)<br>
+        n = concentration molaire du soluté (mol/L)<br>
+        m = osmolarité (mmol/L)<br>
+        C = concentration massique (g/L ou %)<br>
+        M = masse molaire du soluté (g/mol)<br>
+        T = température absolue en °K (°C + 273)<br><br>
+        ⚠️ Si soluté organique (glucide, lipide, protide) : i = 1<br>
+        Si soluté = NaCl : i = 2<br>
+        Si soluté = CaCl₂ : i = 3
+      </div>
+      <div class="important"><strong>Exemple de calcul :</strong> n = Po / (i·R·T) = 7,82 / (2 × 0,082 × 299) = 0,15 mol/L</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🔄 Types de transport membranaire <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Type</th><th>Définition</th><th>Énergie ?</th></tr>
+          <tr><td><em class="kw">Diffusion libre</em></td><td>Passage de milieu hypertonique → hypotonique SANS énergie</td><td>❌ Non</td></tr>
+          <tr><td><em class="kw">Diffusion facilitée</em></td><td>Passage SANS énergie mais avec protéines membranaires (perméases)</td><td>❌ Non</td></tr>
+          <tr><td><em class="kw">Transport actif</em></td><td>Passage CONTRE le gradient de concentration AVEC énergie (ATP)</td><td>✅ Oui (ATP)</td></tr>
+          <tr><td><em class="kw">Osmose</em></td><td>Passage de l'eau à travers membrane semi-perméable</td><td>❌ Non</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🫧 Endocytose et Exocytose <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li><em class="kw">Endocytose</em> = déformation de la membrane pour faire entrer une substance dans la cellule
+          <ul style="margin:8px 0 0 16px;font-size:0.82rem;color:var(--muted)">
+            <li>→ Phagocytose : substance solide ingérée</li>
+            <li>→ Pinocytose : substance liquide ingérée</li>
+          </ul>
+        </li>
+        <li><em class="kw">Exocytose</em> = déformation de la membrane + cytoplasme pour faire SORTIR une substance de la cellule</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🌿 Plasmolyse et Déplasmolyse (cellule végétale) <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li><em class="kw">Plasmolyse</em> = phénomène par lequel une cellule perd de l'eau quand elle est placée dans un milieu <strong>hypertonique</strong></li>
+        <li><em class="kw">Déplasmolyse</em> = phénomène inverse : une cellule plasmolysée redevient turgescente (milieu hypotonique)</li>
+        <li><em class="kw">Déplasmolyse provoquée</em> = cellule plasmolysée transférée dans milieu hypotonique → réabsorption d'eau</li>
+        <li><em class="kw">Déplasmolyse spontanée</em> = cellule plasmolysée redevient turgescente dans son propre milieu (synthèse ou entrée de soluté)</li>
+      </ul>
+      <div class="important"><strong>Rappel :</strong><br>
+      Milieu <em class="kw">hypotonique</em> → cellule absorbe l'eau → turgescente<br>
+      Milieu <em class="kw">isotonique</em> → ni absorption ni perte → normal<br>
+      Milieu <em class="kw">hypertonique</em> → cellule perd l'eau → plasmolysée</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🔬 Types de perméabilité membranaire <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li><em class="kw">Perméabilité unitaire</em> (à pores uniques) : passage d'un soluté à travers une seule membrane</li>
+        <li><em class="kw">Perméabilité différentielle</em> : passage de plusieurs solutés de même masse molaire à des vitesses différentes</li>
+        <li><em class="kw">Perméabilité sélective</em> : passage de certains solutés et impossibilité pour d'autres</li>
+        <li><em class="kw">Semi-perméabilité / perméabilité à l'eau</em> : passage de l'eau seule à travers membrane semi-perméable</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">📊 Expérience de Dutrochet (dialyse) <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li>La <em class="kw">dialyse</em> = passage de soluté du milieu hypertonique vers milieu hypotonique à travers une membrane perméable</li>
+        <li>La <em class="kw">diffusion</em> = passage de soluté d'un milieu à un autre</li>
+        <li>Une <em class="kw">membrane perméable</em> laisse passer l'eau et les solutés</li>
+      </ul>
+      <div class="formula-box">
+        Teneur en eau (%) = mf - mi / mf × 100<br><br>
+        Exemple : Teneur = (30 - 6,5) / 30 × 100 = 30,5%
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== C4 : CELLULES SANGUINES ===== -->
+<div class="section" id="c4">
+  <div class="section-header">
+    <div class="section-tag">Leçon 4</div>
+    <div class="section-title">🩸 Cellules Sanguines</div>
+    <div class="section-sub">Hématies · Leucocytes · Plaquettes · Frottis sanguin</div>
+  </div>
+
+  <div class="hot"><strong>🔥 PROBABLE :</strong> Identification des cellules sanguines sur schéma, rôles de chaque type, différence mammifères/batraciens</div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🔴 Les Hématies (Globules Rouges) <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li>Cellules <em class="kw">biconcaves</em>, anucléées (sans noyau chez mammifères)</li>
+        <li>Cytoplasme imprégné d'<em class="kw">hémoglobine</em></li>
+        <li><strong>Rôle :</strong> Transport des gaz respiratoires (O₂ et CO₂)</li>
+        <li>⚠️ Les hématies des <em class="kw">batraciens</em> sont nucléées (différence avec mammifères)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">⬜ Les Leucocytes (Globules Blancs) <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <div class="table-wrap">
+        <table>
+          <tr><th>Type</th><th>Caractéristiques</th></tr>
+          <tr><td><em class="kw">Lymphocytes</em></td><td>Noyau arrondi · Cytoplasme réduit</td></tr>
+          <tr><td><em class="kw">Monocytes</em></td><td>Noyau incurvé · Cytoplasme clair</td></tr>
+          <tr><td><em class="kw">Polynucléaires neutrophiles</em></td><td>Noyau lobé · Cytoplasme granuleux</td></tr>
+          <tr><td><em class="kw">Polynucléaires éosinophiles</em></td><td>Noyau bilobé · Granulations éosinophiles</td></tr>
+          <tr><td><em class="kw">Polynucléaires basophiles</em></td><td>Noyau irrégulier · Granulations basophiles</td></tr>
+        </table>
+      </div>
+      <div class="important"><strong>Rôle des leucocytes :</strong> Défense de l'organisme contre la pénétration des microbes (immunité)</div>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🟡 Les Plaquettes Sanguines (Globulins) <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li>Cellules <em class="kw">anucléées</em>, très petites, souvent rassemblées en amas</li>
+        <li><strong>Rôle :</strong> Interviennent dans la <em class="kw">coagulation du sang</em></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🧫 Réalisation d'un frottis sanguin <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li>Déposer une goutte de sang sur une lame</li>
+        <li>Étaler à l'aide d'une lamelle</li>
+        <li>Laisser sécher</li>
+        <li>Traiter avec fixateur + colorant (bleu de méthylène)</li>
+        <li>Observer au microscope</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== C5 : GÉOLOGIE TOGO ===== -->
+<div class="section" id="c5">
+  <div class="section-header">
+    <div class="section-tag">Leçon 5</div>
+    <div class="section-title">🌍 Formations Géologiques du Togo</div>
+    <div class="section-sub">4 grands ensembles · Du nord au sud</div>
+  </div>
+
+  <div class="hot"><strong>🔥 PROBABLE :</strong> Identification et localisation des 4 formations géologiques du Togo, roches caractéristiques</div>
+
+  <div class="important"><strong>Les 4 grandes formations géologiques du Togo (nord → sud) :</strong><br>
+  1. Socle Birrimien (bouclier ouest-africain)<br>
+  2. Bassin des Voltas<br>
+  3. Unité structurale du Buem (Chaîne des Atacora)<br>
+  4. Bassin sédimentaire côtier (Dahoméyen)</div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🪨 A. Le Socle Birrimien <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li>Situé au nord de Dapaong · partie du <em class="kw">bouclier ouest-africain</em></li>
+        <li>Date du <em class="kw">précambrien moyen</em> : 2 milliards d'années (2000 millions)</li>
+        <li>Roches <em class="kw">magmatiques</em> : granites, granodiorite</li>
+        <li>Roches <em class="kw">métamorphiques</em> : quartzites, amphibolites, migmatites, micaschistes</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🏔️ B. Le Bassin des Voltas <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li>S'étend du <em class="kw">sud de Dapaong au nord de Kara</em> · couvre la plaine de l'Oti</li>
+        <li>Formation de <em class="kw">couverture ancienne</em></li>
+        <li>Structure en <em class="kw">cuvette</em> où se déposent les sédiments</li>
+        <li>2 super-groupes : Super-groupe I (Tambakoua) + Super-groupe II (Oti)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">⛰️ C. Unité Structurale du Buem (Atacora) <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li>Assemblage à métamorphisme épizonal à marginal</li>
+        <li>Composée de schistes de Buem et de l'Atacora</li>
+        <li>Unité de Buem : grès, calcaires, quartzites, ardoises, dolomites</li>
+        <li>Chevauchée à l'ouest par le bassin des Voltas, à l'est par la chaîne de l'Atacora</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">🌊 D. Bassin Sédimentaire Côtier <span class="acc-icon">▼</span></div>
+    <div class="acc-body">
+      <ul class="key-list">
+        <li>Ensemble géologique entre l'<em class="kw">Océan Atlantique au sud</em> et le <em class="kw">socle Dahoméyen au nord</em></li>
+        <li>Délimité au nord par la dépression de Pahua</li>
+        <li>Roches caractéristiques : <em class="kw">calcaires</em> (Tabligbo), <em class="kw">phosphates</em> (Kpogamé, Hahotoe), <em class="kw">sable</em>, <em class="kw">gravier</em>, <em class="kw">argile</em>, <em class="kw">marnes</em></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div class="section" id="quiz">
+  <div class="section-header">
+    <div class="section-tag">Entraînement</div>
+    <div class="section-title">❓ Quiz BAC1</div>
+    <div class="section-sub">30 questions type examen · Explications détaillées</div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div class="score-display">Score : <span id="q-score">0</span> / <span id="q-total">0</span></div>
+    <button class="btn btn-ghost btn-sm" onclick="resetQuiz()">🔄 Recommencer</button>
+  </div>
+
+  <div id="quiz-container"></div>
+</div>
+
+<!-- ===== FLASHCARDS ===== -->
+<div class="section" id="flash">
+  <div class="section-header">
+    <div class="section-tag">Mémorisation</div>
+    <div class="section-title">🃏 Flashcards</div>
+    <div class="section-sub">Clique sur la carte pour voir la réponse</div>
+  </div>
+
+  <div class="flashcard-wrap" id="flashcard" onclick="flipCard()">
+    <div class="flashcard-inner">
+      <div class="fc-front">
+        <div class="fc-hint">QUESTION</div>
+        <div class="fc-question" id="fc-q">Chargement...</div>
+      </div>
+      <div class="fc-back" id="fc-a">...</div>
+    </div>
+  </div>
+
+  <div class="fc-nav">
+    <button class="btn btn-ghost btn-sm" onclick="prevCard()">← Précédent</button>
+    <div class="fc-counter"><span id="fc-cur">1</span> / <span id="fc-max">25</span></div>
+    <button class="btn btn-ghost btn-sm" onclick="nextCard()">Suivant →</button>
+  </div>
+
+  <div style="margin-top:16px;text-align:center">
+    <button class="btn btn-ghost btn-sm" onclick="shuffleCards()">🔀 Mélanger</button>
+  </div>
+</div>
+
+<!-- ===== TRACKER ===== -->
+<div class="section" id="tracker">
+  <div class="section-header">
+    <div class="section-tag">Suivi</div>
+    <div class="section-title">✅ Mon Progrès</div>
+    <div class="section-sub">Coche ce que tu as révisé aujourd'hui</div>
+  </div>
+
+  <div style="margin-bottom:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+      <span style="font-size:0.85rem;color:var(--muted)">Progression globale</span>
+      <span id="prog-pct" style="font-family:var(--mono);color:var(--green);font-weight:700">0%</span>
+    </div>
+    <div class="progress-outer" style="height:8px">
+      <div class="progress-inner" id="prog-bar" style="width:0%"></div>
+    </div>
+  </div>
+
+  <div id="tracker-list"></div>
+
+  <div class="important" style="margin-top:20px">
+    <strong>Plan de révision 2 jours :</strong><br>
+    📅 <strong>Aujourd'hui :</strong> Organisation cellulaire + Chimie du vivant + Quiz x2<br>
+    📅 <strong>Demain :</strong> Échanges cellulaires + Cellules sanguines + Géologie + Quiz x3 + Flashcards<br>
+    🌙 <strong>Lundi soir :</strong> Révision express des définitions clés + formules
+  </div>
+</div>
+
+</main>
+
+<script>
+// ===== NAVIGATION =====
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const idx = ['home','c1','c2','c3','c4','c5','quiz','flash','tracker'];
+  const nb = document.querySelectorAll('.nav-btn');
+  const i = idx.indexOf(id);
+  if (i >= 0 && nb[i]) nb[i].classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// ===== ACCORDIONS =====
+function toggleAcc(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.contains('open');
+  document.querySelectorAll('.acc-header.open').forEach(h => {
+    h.classList.remove('open');
+    h.nextElementSibling.classList.remove('open');
+  });
+  if (!isOpen) {
+    header.classList.add('open');
+    body.classList.add('open');
+  }
+}
+
+// ===== TIMER =====
+let startTime = Date.now();
+let totalScore = 0;
+function updateTimer() {
+  const elapsed = Math.floor((Date.now() - startTime) / 1000);
+  const h = Math.floor(elapsed / 3600);
+  const m = Math.floor((elapsed % 3600) / 60);
+  const s = elapsed % 60;
+  document.getElementById('timer-display').textContent =
+    String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  const pct = Math.min((elapsed / 28800) * 100, 100);
+  document.getElementById('day-progress').style.width = pct + '%';
+}
+setInterval(updateTimer, 1000);
+
+// ===== SCROLL PROGRESS =====
+window.addEventListener('scroll', () => {
+  const scrollTop = document.documentElement.scrollTop;
+  const docH = document.documentElement.scrollHeight - window.innerHeight;
+  const pct = (scrollTop / docH) * 100;
+  document.getElementById('scroll-bar').style.width = pct + '%';
+});
+
+// ===== QUIZ =====
+const quizData = [
+  { q: "Quelle est la différence entre une cellule eucaryote et une cellule procaryote ?", opts: ["La eucaryote a un noyau différencié, la procaryote non", "La procaryote est plus grande", "La eucaryote n'a pas de membrane", "Elles sont identiques"], ans: 0, exp: "Les cellules eucaryotes possèdent un noyau entouré d'une membrane nucléaire. Les procaryotes (bactéries) n'ont pas de noyau différencié. Ex: paramécie = eucaryote, bactérie = procaryote." },
+  { q: "Quel organite est le siège des oxydations cellulaires et fournit de l'ATP ?", opts: ["Le réticulum endoplasmique", "L'appareil de Golgi", "La mitochondrie", "Le ribosome"], ans: 2, exp: "La mitochondrie est le 'central énergétique' de la cellule. Elle produit l'ATP (Adénosine Triphosphate) grâce aux oxydations cellulaires." },
+  { q: "Quel est le rôle principal des ribosomes ?", opts: ["Photosynthèse", "Synthèse des protéines (protéosynthèse)", "Division cellulaire", "Transport de l'eau"], ans: 1, exp: "Les ribosomes assurent la synthèse des protéines. Ils sont constitués d'ARN ribosomique et de protéines, formés de 2 sous-unités." },
+  { q: "Quelle structure est SPÉCIFIQUE à la cellule végétale ?", opts: ["Mitochondrie", "Membrane plasmique", "Paroi pecto-cellulosique", "Noyau"], ans: 2, exp: "La paroi pecto-cellulosique est composée de pectine et de cellulose. Elle est SPÉCIFIQUE aux cellules végétales et protège contre l'éclatement. Elle est percée de plasmodesmes." },
+  { q: "Quelle est la formule de la pression osmotique ?", opts: ["Po = R × T", "Po = i × R × n × T", "Po = n / M", "Po = C × T / i"], ans: 1, exp: "Po = π = i·R·n·T. Avec i = coefficient d'ionisation, R = 0,082, n = concentration molaire, T = température absolue (°C + 273)." },
+  { q: "La plasmolyse se produit quand une cellule végétale est placée dans un milieu :", opts: ["Hypotonique", "Isotonique", "Hypertonique", "Neutre"], ans: 2, exp: "En milieu hypertonique, la cellule perd de l'eau par osmose → le cytoplasme se rétracte → c'est la plasmolyse. L'inverse (réabsorption d'eau) s'appelle déplasmolyse." },
+  { q: "Quel type de transport nécessite de l'énergie (ATP) ?", opts: ["Diffusion libre", "Osmose", "Diffusion facilitée", "Transport actif"], ans: 3, exp: "Le transport actif se fait CONTRE le gradient de concentration (de hypotonique vers hypertonique) et nécessite de l'ATP. Ex: pompe Na⁺/K⁺." },
+  { q: "La phagocytose est une forme de :", opts: ["Exocytose", "Diffusion", "Endocytose pour substance solide", "Transport actif"], ans: 2, exp: "La phagocytose est un type d'endocytose où la substance à ingérer est solide. La pinocytose ingère des liquides. Les deux font partie de l'endocytose." },
+  { q: "Les hématies (globules rouges) des mammifères sont :", opts: ["Nucléées et biconcaves", "Anucléées et biconcaves", "Nucléées et sphériques", "Anucléées et sphériques"], ans: 1, exp: "Les hématies des mammifères sont ANUCLÉÉES (sans noyau) et biconcaves. Leur cytoplasme est riche en hémoglobine pour transporter O₂ et CO₂. Les hématies des batraciens, elles, sont nucléées." },
+  { q: "Quel est le rôle des leucocytes (globules blancs) ?", opts: ["Transport de l'oxygène", "Coagulation du sang", "Défense contre les microbes (immunité)", "Photosynthèse"], ans: 2, exp: "Les leucocytes assurent la défense de l'organisme. On distingue : lymphocytes, monocytes, polynucléaires (neutrophiles, éosinophiles, basophiles)." },
+  { q: "La formule brute du glucose est :", opts: ["C₁₂H₂₂O₁₁", "C₆H₁₂O₆", "C₅H₁₀O₅", "C₆H₁₀O₅"], ans: 1, exp: "Le glucose est un hexose de formule C₆H₁₂O₆. Le saccharose (diholoside) a la formule C₁₂H₂₂O₁₁. Le ribose (pentose) a C₅H₁₀O₅." },
+  { q: "L'équation générale de la réaction d'estérification est :", opts: ["R-COOH + NaOH → R-COONa + H₂O", "R-COOH + HO-R' → R-COO-R' + H₂O", "R-COOH → R + CO₂ + H₂O", "2R-COOH → R-R + 2CO₂"], ans: 1, exp: "L'estérification : acide gras (R-COOH) + alcool (HO-R') → ester/lipide (R-COO-R') + eau. La saponification c'est l'inverse : ester + soude/potasse → savon + alcool." },
+  { q: "Le REG (réticulum endoplasmique granuleux) est aussi appelé :", opts: ["Réticulum lisse", "Ergastoplasme ou RER", "Dictyosome", "Tonoplaste"], ans: 1, exp: "Le REG = ergastoplasme = RER (Réticulum Endoplasmique Rugueux). Il porte des ribosomes à sa surface et est impliqué dans la synthèse et le transport des protéines." },
+  { q: "Quel organite est spécifique aux cellules animales et forme les asters lors de la division ?", opts: ["Chloroplaste", "Centrosome", "Appareil de Golgi", "Vacuole"], ans: 1, exp: "Le centrosome est formé de 2 centrioles perpendiculaires. Il est spécifique aux cellules animales et aux végétaux inférieurs. Il forme les asters (étoiles) lors des divisions cellulaires et est à l'origine des flagelles et cils." },
+  { q: "Quel est le rôle de l'appareil de Golgi ?", opts: ["Synthèse des protéines", "Oxydation cellulaire", "Stockage, emballage et transport des produits de synthèse", "Photosynthèse"], ans: 2, exp: "L'appareil de Golgi (ensemble des dictyosomes) est le lieu de stockage, d'emballage et de transport des produits de synthèse. Il produit aussi les vésicules de sécrétion et les grains de zymogène." },
+  { q: "Combien de formations géologiques majeures compte le Togo ?", opts: ["2", "3", "4", "5"], ans: 2, exp: "Le Togo compte 4 grands ensembles géologiques (du nord au sud) : Socle Birrimien, Bassin des Voltas, Unité du Buem (Atacora), et Bassin sédimentaire côtier." },
+  { q: "Le bassin sédimentaire côtier du Togo contient des gisements de :", opts: ["Granites et quartzites", "Phosphates (Kpogamé, Hahotoe) et calcaires (Tabligbo)", "Pétrole et diamants", "Basalte et obsidienne"], ans: 1, exp: "Le bassin sédimentaire côtier contient : calcaires (Tabligbo), phosphates (Kpogamé et Hahotoe), sable, gravier, argile, marnes. Ces ressources sont économiquement importantes pour le Togo." },
+  { q: "La cytologie est :", opts: ["La science qui étudie les gènes", "La science qui étudie les cellules", "La science qui étudie les roches", "La science qui étudie les virus"], ans: 1, exp: "La cytologie (du grec kytos = cellule) est la science qui étudie les cellules. Elle utilise notamment le microscope optique et le microscope électronique." },
+  { q: "La dialyse est définie comme :", opts: ["Passage d'eau à travers une membrane", "Passage de soluté du milieu hypertonique vers hypotonique à travers une membrane perméable", "Division cellulaire", "Synthèse de protéines"], ans: 1, exp: "La dialyse = passage de soluté du milieu concentré (hypertonique) vers le milieu dilué (hypotonique) à travers une membrane perméable. Ex : expérience de Dutrochet avec le sulfate de cuivre." },
+  { q: "La coagulation du sang est assurée par :", opts: ["Les hématies", "Les leucocytes", "Les plaquettes sanguines (globulins)", "L'hémoglobine"], ans: 2, exp: "Les plaquettes sanguines (ou globulins) sont de petites cellules anucléées qui interviennent dans la coagulation du sang. Elles se regroupent en amas pour former le caillot." },
+  { q: "Si le soluté est du NaCl, la valeur du coefficient d'ionisation i est :", opts: ["i = 1", "i = 2", "i = 3", "i = 0"], ans: 1, exp: "NaCl se dissocie en 2 ions (Na⁺ + Cl⁻), donc i = 2. Si composé organique (glucose, lipide, protéine) : i = 1. Si CaCl₂ (Ca²⁺ + 2Cl⁻) : i = 3." },
+  { q: "Le cytoplasme est la somme de :", opts: ["Noyau + membrane + vacuoles", "Hyaloplasme + organites cellulaires + inclusions", "Ribosomes + mitochondries", "Membranes + pores nucléaires"], ans: 1, exp: "Cytoplasme = Hyaloplasme (substance fondamentale) + Organites cellulaires + Inclusions. C'est le siège de nombreuses réactions cellulaires." },
+  { q: "Quel est le rôle principal du noyau (d'après l'expérience de mérotomie) ?", opts: ["Produire l'énergie", "Assurer la photosynthèse", "Entretenir la vie, division et transmission des caractères héréditaires", "Synthétiser les lipides"], ans: 2, exp: "Le noyau : entretient la vie (sans lui la cellule meurt), intervient dans la division cellulaire, dans la nutrition cellulaire, et est responsable de la transmission des caractères héréditaires." },
+  { q: "Les polynucléaires se distinguent par :", opts: ["Un noyau arrondi", "Un noyau incurvé", "Un noyau lobé et cytoplasme granuleux", "L'absence de noyau"], ans: 2, exp: "Les polynucléaires ont un noyau lobé et un cytoplasme granuleux. Il en existe 3 types : neutrophiles, éosinophiles et basophiles. Ils font partie des leucocytes." },
+  { q: "L'estérification produit :", opts: ["Un savon + alcool", "Un ester (lipide) + eau", "Un acide gras + alcool", "Des acides aminés + eau"], ans: 1, exp: "Estérification : R-COOH + HO-R' → R-COO-R' + H₂O. Le produit est un ester (lipide). La saponification donne un savon (R-COO-Na) + alcool." },
+  { q: "La membrane nucléaire est formée de :", opts: ["Un seul feuillet", "Deux feuillets (interne et externe)", "Trois couches (lipides + protéines)", "Cellulose et pectine"], ans: 1, exp: "La membrane nucléaire (enveloppe nucléaire) est formée de 2 feuillets. Le feuillet externe est en relation avec l'ergastoplasme (REG). Elle est interrompue par des pores nucléaires." },
+  { q: "Le socle Birrimien du Togo date de :", opts: ["500 millions d'années", "1 milliard d'années", "2 milliards d'années (Précambrien moyen)", "65 millions d'années"], ans: 2, exp: "Le socle Birrimien date du précambrien moyen, soit environ 2 milliards d'années (2000 millions). Il contient des roches magmatiques (granites) et métamorphiques (quartzites, amphibolites, migmatites)." },
+  { q: "La teneur en eau des cellules = :", opts: ["mf / mi × 100", "(mf - mi) / mf × 100", "(mi - mf) / mi × 100", "mi × mf × 100"], ans: 1, exp: "Teneur en eau (%) = (masse finale - masse initiale) / masse finale × 100 = (mf - mi) / mf × 100. Si mf = 30g et mi = 6,5g → (30-6,5)/30 × 100 = 78,3%" },
+  { q: "Les chloroplastes assurent :", opts: ["La respiration cellulaire", "La photosynthèse", "La division cellulaire", "La digestion"], ans: 1, exp: "Les chloroplastes sont des plastes verts (chlorophylle) spécifiques aux cellules végétales. Ils assurent la photosynthèse : transformation de l'énergie lumineuse en énergie chimique." },
+  { q: "La paramécie est un exemple de :", opts: ["Cellule procaryote", "Cellule eucaryote unicellulaire animale", "Cellule végétale", "Cellule sanguine"], ans: 1, exp: "La paramécie est une cellule eucaryote unicellulaire animale. Elle possède : membrane plasmique, cytoplasme, vacuoles digestives et pulsatiles, 2 noyaux (micronucleus + macronucleus), cils vibratiles." }
+];
+
+let quizAnswers = new Array(quizData.length).fill(null);
+let qScore = 0;
+
+function initQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = '';
+  quizAnswers = new Array(quizData.length).fill(null);
+  qScore = 0;
+  updateQScore();
+  quizData.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'quiz-card';
+    div.innerHTML = `
+      <div class="quiz-num">Q${i+1} / ${quizData.length}</div>
+      <div class="quiz-q">${q.q}</div>
+      <div class="options">
+        ${q.opts.map((o, j) => `<button class="opt-btn" data-q="${i}" data-a="${j}" onclick="answerQ(${i}, ${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join('')}
+      </div>
+      <div class="explication" id="exp-${i}">💡 ${q.exp}</div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+function answerQ(qi, ai) {
+  if (quizAnswers[qi] !== null) return;
+  quizAnswers[qi] = ai;
+  const correct = quizData[qi].ans;
+  const btns = document.querySelectorAll(`[data-q="${qi}"]`);
+  btns.forEach(b => {
+    b.disabled = true;
+    const idx = parseInt(b.dataset.a);
+    if (idx === correct) b.classList.add('correct');
+    else if (idx === ai && ai !== correct) b.classList.add('wrong');
+  });
+  document.getElementById('exp-' + qi).classList.add('show');
+  if (ai === correct) {
+    qScore++;
+    totalScore += 5;
+    document.getElementById('score-num').textContent = totalScore;
+  }
+  updateQScore();
+}
+
+function updateQScore() {
+  const answered = quizAnswers.filter(a => a !== null).length;
+  document.getElementById('q-score').textContent = qScore;
+  document.getElementById('q-total').textContent = answered;
+}
+
+function resetQuiz() {
+  qScore = 0;
+  initQuiz();
+}
+
+// ===== FLASHCARDS =====
+const flashData = [
+  { q: "Définition de la Cytologie", a: "Science qui étudie les cellules. Utilise microscopes optique et électronique." },
+  { q: "Différence cellule eucaryote / procaryote", a: "Eucaryote = noyau différencié (ex: paramécie)\nProcaryote = sans noyau différencié (ex: bactérie)" },
+  { q: "Rôle de la mitochondrie", a: "Siège des oxydations cellulaires. Fournit l'énergie sous forme d'ATP (Adénosine Triphosphate). Central énergétique." },
+  { q: "Rôle de l'appareil de Golgi", a: "Lieu de stockage, emballage et transport des produits de synthèse. Produit vésicules de sécrétion et grains de zymogène." },
+  { q: "Formule de la pression osmotique", a: "Po = i × R × n × T\ni = coeff. ionisation, R = 0,082, n = concentration molaire, T = °C + 273" },
+  { q: "Qu'est-ce que la plasmolyse ?", a: "Phénomène où une cellule perd de l'eau en milieu HYPERTONIQUE → rétraction du cytoplasme" },
+  { q: "Qu'est-ce que la déplasmolyse ?", a: "Phénomène inverse de la plasmolyse : cellule plasmolysée redevient turgescente en milieu hypotonique" },
+  { q: "Formule générale glucide (hexose)", a: "Formule : CₙH₂ₙOₙ\nEx: Glucose = C₆H₁₂O₆\nSaccharose = C₁₂H₂₂O₁₁ (diholoside)" },
+  { q: "Réaction d'estérification", a: "R-COOH + HO-R' → R-COO-R' + H₂O\nacide gras + alcool → ester (lipide) + eau" },
+  { q: "Réaction de saponification", a: "R-COO-R' + NaOH → R-COO-Na + R'-OH\nester + soude → savon de soude + alcool" },
+  { q: "Rôle des ribosomes", a: "Synthèse des protéines (protéosynthèse). Constitués d'ARN ribosomique et de protéines, 2 sous-unités." },
+  { q: "Structure de la membrane plasmique", a: "2 zones sombres séparées par 1 zone claire. Rôles : protège la cellule, contrôle les échanges, forme les sillons de division." },
+  { q: "Qu'est-ce que l'endocytose ?", a: "Déformation de la membrane pour faire ENTRER une substance.\nPhagocytose = solide / Pinocytose = liquide" },
+  { q: "Qu'est-ce que l'exocytose ?", a: "Déformation de la membrane + cytoplasme pour faire SORTIR une substance. La vacuole fusionne avec la membrane plasmique." },
+  { q: "Rôle des hématies (globules rouges)", a: "Transport des gaz respiratoires (O₂ et CO₂). Anucléées et biconcaves chez les mammifères. Contiennent de l'hémoglobine." },
+  { q: "3 types de polynucléaires", a: "1. Neutrophiles (noyau lobé)\n2. Éosinophiles\n3. Basophiles\nRôle : défense contre microbes" },
+  { q: "Rôle des plaquettes sanguines", a: "Interviennent dans la coagulation du sang. Anucléées, très petites, souvent en amas." },
+  { q: "4 formations géologiques du Togo (N→S)", a: "1. Socle Birrimien\n2. Bassin des Voltas\n3. Unité du Buem (Atacora)\n4. Bassin sédimentaire côtier" },
+  { q: "Âge du socle Birrimien", a: "Précambrien moyen = 2 milliards d'années (2000 millions). Roches: granites, quartzites, amphibolites, migmatites." },
+  { q: "Transport actif vs diffusion libre", a: "Diffusion libre : sans énergie, dans le sens du gradient (hyper→hypo)\nTransport actif : avec ATP, CONTRE le gradient" },
+  { q: "Qu'est-ce que le transport passif ?", a: "Passage de substances SANS dépense d'énergie (ATP). Comprend : diffusion libre, diffusion facilitée, osmose." },
+  { q: "Valeur de i pour : glucide / NaCl / CaCl₂", a: "Glucide (composé organique) : i = 1\nNaCl : i = 2 (2 ions)\nCaCl₂ : i = 3 (3 ions)" },
+  { q: "Rôle du noyau (3 rôles clés)", a: "1. Entretient la vie (sans noyau = mort)\n2. Intervient dans la division cellulaire\n3. Responsable de la transmission des caractères héréditaires" },
+  { q: "Différences cellule animale vs végétale", a: "Végétale SEULE : paroi pecto-cellulosique, chloroplastes, grandes vacuoles, plasmodesmes\nAnimale SEULE : centrosome" },
+  { q: "Phosphates du Togo : localisation", a: "Kpogamé et Hahotoe → dans le Bassin sédimentaire côtier du Togo" }
+];
+
+let fcIndex = 0;
+let shuffledCards = [...flashData];
+
+function initFlash() {
+  document.getElementById('fc-max').textContent = shuffledCards.length;
+  updateCard();
+}
+
+function updateCard() {
+  const card = shuffledCards[fcIndex];
+  document.getElementById('fc-q').textContent = card.q;
+  document.getElementById('fc-a').textContent = card.a;
+  document.getElementById('fc-cur').textContent = fcIndex + 1;
+  document.getElementById('flashcard').classList.remove('flipped');
+}
+
+function flipCard() { document.getElementById('flashcard').classList.toggle('flipped'); }
+function nextCard() { fcIndex = (fcIndex + 1) % shuffledCards.length; updateCard(); }
+function prevCard() { fcIndex = (fcIndex - 1 + shuffledCards.length) % shuffledCards.length; updateCard(); }
+function shuffleCards() {
+  shuffledCards = [...flashData].sort(() => Math.random() - 0.5);
+  fcIndex = 0;
+  updateCard();
+}
+
+// ===== TRACKER =====
+const trackerItems = [
+  "✅ Définitions cellule eucaryote / procaryote",
+  "✅ Schéma annoté de la cellule animale (17 organites)",
+  "✅ Schéma annoté de la cellule végétale",
+  "✅ Tableau comparaison cellule animale vs végétale",
+  "✅ Rôles des organites (mitochondrie, Golgi, REG, REL...)",
+  "✅ Formules des glucides (glucose, saccharose, amidon)",
+  "✅ Équation d'estérification et de saponification",
+  "✅ Liaison peptidique des acides aminés",
+  "✅ Formule de la pression osmotique (Po = i·R·n·T)",
+  "✅ Types de transport membranaire (actif, passif, facilité)",
+  "✅ Plasmolyse et déplasmolyse (expériences)",
+  "✅ Endocytose et exocytose (phagocytose, pinocytose)",
+  "✅ Cellules sanguines et leurs rôles",
+  "✅ Réalisation d'un frottis sanguin",
+  "✅ Les 4 formations géologiques du Togo",
+  "✅ Ressources du bassin sédimentaire côtier",
+  "✅ Quiz complet (30 questions)",
+  "✅ Flashcards (25 cartes)",
+  "✅ Formule teneur en eau des cellules"
+];
+
+let trackerState = new Array(trackerItems.length).fill(false);
+
+function initTracker() {
+  const list = document.getElementById('tracker-list');
+  list.innerHTML = '';
+  trackerItems.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'tracker-item';
+    div.innerHTML = `
+      <span style="font-size:0.85rem">${item}</span>
+      <div class="tracker-check ${trackerState[i] ? 'done' : ''}" onclick="toggleTrack(${i})">
+        ${trackerState[i] ? '✓' : ''}
+      </div>
+    `;
+    list.appendChild(div);
+  });
+  updateProgress();
+}
+
+function toggleTrack(i) {
+  trackerState[i] = !trackerState[i];
+  initTracker();
+}
+
+function updateProgress() {
+  const done = trackerState.filter(Boolean).length;
+  const pct = Math.round((done / trackerItems.length) * 100);
+  document.getElementById('prog-pct').textContent = pct + '%';
+  document.getElementById('prog-bar').style.width = pct + '%';
+}
+
+// ===== INIT =====
+initQuiz();
+initFlash();
+initTracker();
+</script>
+</body>
+</html>
