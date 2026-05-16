@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ECM Bac 1 — Révision Express 🇹🇬</title>
+<style>
+  /* Polices système — fonctionne 100% hors ligne */
+  @font-face {
+    font-family: 'DisplayFont';
+    src: local('Impact'), local('Arial Black'), local('Franklin Gothic Heavy'), local('sans-serif-condensed');
+    font-display: swap;
+  }
+  :root {
+    --bg: #0a0e1a;
+    --card: #111827;
+    --border: #1e293b;
+    --accent: #facc15;
+    --green: #22c55e;
+    --red: #ef4444;
+    --blue: #38bdf8;
+    --purple: #a78bfa;
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --font-display: Impact, 'Arial Black', 'Franklin Gothic Heavy', ui-sans-serif, sans-serif;
+    --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-mono: 'Courier New', Courier, monospace;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: linear-gradient(135deg, #111827 0%, #0a0e1a 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 20px 24px 16px;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-inner { max-width: 900px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .logo { font-family: var(--font-display); font-size: 2rem; color: var(--accent); letter-spacing: 2px; line-height: 1; }
+  .logo span { color: var(--text); }
+  .exam-badge {
+    background: var(--red); color: #fff; font-size: 0.72rem; font-weight: 700;
+    padding: 5px 12px; border-radius: 20px; letter-spacing: 1px; white-space: nowrap;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.7} }
+
+  /* NAV TABS */
+  nav {
+    background: var(--card); border-bottom: 1px solid var(--border);
+    overflow-x: auto; scrollbar-width: none;
+  }
+  nav::-webkit-scrollbar { display: none; }
+  .tabs { display: flex; max-width: 900px; margin: 0 auto; }
+  .tab {
+    padding: 12px 18px; font-size: 0.82rem; font-weight: 600; cursor: pointer;
+    border-bottom: 3px solid transparent; white-space: nowrap; color: var(--muted);
+    transition: all .2s; flex-shrink: 0;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* MAIN */
+  main { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  /* SECTIONS */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* CARDS */
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px; margin-bottom: 16px;
+  }
+  .card-title {
+    font-family: var(--font-display); font-size: 1.3rem;
+    color: var(--accent); letter-spacing: 1px; margin-bottom: 12px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .badge {
+    font-family: 'DM Sans', sans-serif; font-size: 0.65rem; font-weight: 700;
+    padding: 3px 8px; border-radius: 20px; letter-spacing: 1px;
+  }
+  .badge-hot { background: #ef444422; color: var(--red); border: 1px solid var(--red); }
+  .badge-key { background: #facc1522; color: var(--accent); border: 1px solid var(--accent); }
+
+  /* DEFINITION BOX */
+  .def {
+    background: #0f172a; border-left: 3px solid var(--blue);
+    border-radius: 0 8px 8px 0; padding: 10px 14px; margin: 8px 0;
+    font-size: 0.88rem; line-height: 1.6;
+  }
+  .def strong { color: var(--blue); }
+
+  /* LIST */
+  .list { list-style: none; padding: 0; }
+  .list li {
+    padding: 6px 0; font-size: 0.88rem; color: var(--muted);
+    border-bottom: 1px solid #1e293b; display: flex; gap: 8px; align-items: flex-start;
+    line-height: 1.5;
+  }
+  .list li:last-child { border-bottom: none; }
+  .list li::before { content: "▸"; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+  .list li strong { color: var(--text); }
+
+  /* HIGHLIGHT BOX */
+  .highlight {
+    background: linear-gradient(135deg, #facc1511, #facc1505);
+    border: 1px solid #facc1544; border-radius: 8px; padding: 12px 16px;
+    margin: 10px 0; font-size: 0.85rem;
+  }
+  .highlight-title { color: var(--accent); font-weight: 700; margin-bottom: 6px; font-size: 0.8rem; letter-spacing: 1px; }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media(max-width:600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* MINI CARD */
+  .mini-card {
+    background: #0f172a; border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px;
+  }
+  .mini-card .mini-title { font-weight: 700; color: var(--text); font-size: 0.85rem; margin-bottom: 6px; }
+
+  /* SECTION HEADER */
+  .section-header { margin-bottom: 20px; }
+  .section-header h2 {
+    font-family: var(--font-display); font-size: 2rem; color: var(--text);
+    letter-spacing: 2px; line-height: 1;
+  }
+  .section-header p { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+
+  /* QUIZ */
+  .quiz-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px; margin-bottom: 16px;
+  }
+  .quiz-q {
+    font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 16px; line-height: 1.5;
+  }
+  .quiz-q .qnum {
+    font-family: var(--font-mono); color: var(--accent);
+    font-size: 0.75rem; display: block; margin-bottom: 6px;
+  }
+  .options { display: flex; flex-direction: column; gap: 8px; }
+  .option {
+    background: #0f172a; border: 1.5px solid var(--border);
+    border-radius: 8px; padding: 10px 14px; cursor: pointer;
+    font-size: 0.875rem; color: var(--muted); transition: all .15s;
+    text-align: left; font-family: var(--font-body);
+  }
+  .option:hover { border-color: var(--accent); color: var(--text); }
+  .option.correct { border-color: var(--green); background: #22c55e15; color: var(--green); }
+  .option.wrong { border-color: var(--red); background: #ef444415; color: var(--red); }
+  .option.reveal { border-color: var(--green); background: #22c55e15; color: var(--green); }
+  .option:disabled { cursor: not-allowed; }
+  .explanation {
+    margin-top: 12px; background: #0f172a; border-radius: 8px; padding: 12px;
+    font-size: 0.82rem; color: var(--muted); display: none; line-height: 1.6;
+  }
+  .explanation.show { display: block; }
+  .explanation strong { color: var(--blue); }
+
+  /* QUIZ SCORE */
+  #quiz-score {
+    background: var(--card); border: 2px solid var(--accent);
+    border-radius: 12px; padding: 24px; text-align: center; margin-top: 20px; display: none;
+  }
+  #quiz-score .score-num {
+    font-family: 'Bebas Neue', sans-serif; font-size: 4rem; color: var(--accent); line-height: 1;
+  }
+  #quiz-score p { color: var(--muted); margin-top: 4px; }
+  .btn {
+    display: inline-block; margin-top: 14px; padding: 10px 24px;
+    background: var(--accent); color: #000; border-radius: 8px;
+    font-weight: 700; cursor: pointer; border: none; font-family: var(--font-body);
+    font-size: 0.875rem;
+  }
+  .btn:hover { opacity: .85; }
+
+  /* PLANNING */
+  .planning-day { margin-bottom: 24px; }
+  .day-label {
+    font-family: var(--font-display); font-size: 1.5rem;
+    color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 6px; margin-bottom: 12px;
+  }
+  .task {
+    display: flex; gap: 12px; align-items: flex-start;
+    background: #0f172a; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px;
+  }
+  .task-time {
+    font-family: var(--font-mono); color: var(--blue);
+    font-size: 0.75rem; white-space: nowrap; margin-top: 2px; font-weight: 500;
+  }
+  .task-content { font-size: 0.875rem; color: var(--text); line-height: 1.5; }
+  .task-content span { color: var(--muted); font-size: 0.8rem; display: block; margin-top: 2px; }
+
+  /* ACCUEIL */
+  .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  @media(max-width:600px) { .home-grid { grid-template-columns: 1fr; } }
+  .home-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px; cursor: pointer;
+    transition: all .2s; text-align: center;
+  }
+  .home-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .home-card .icon { font-size: 2rem; margin-bottom: 8px; }
+  .home-card .hc-title { font-weight: 700; font-size: 0.95rem; color: var(--text); }
+  .home-card .hc-sub { color: var(--muted); font-size: 0.78rem; margin-top: 4px; }
+
+  .progress-bar-wrap { background: var(--border); border-radius: 20px; height: 6px; margin-top: 6px; }
+  .progress-bar { height: 6px; border-radius: 20px; background: var(--accent); transition: width .3s; }
+
+  /* TAG */
+  .tag {
+    display: inline-block; font-size: 0.68rem; font-weight: 700; letter-spacing: .5px;
+    padding: 2px 8px; border-radius: 20px; margin-right: 4px; margin-bottom: 4px;
+  }
+  .tag-1gen { background: #38bdf822; color: var(--blue); border: 1px solid #38bdf844; }
+  .tag-2gen { background: #a78bfa22; color: var(--purple); border: 1px solid #a78bfa44; }
+  .tag-3gen { background: #22c55e22; color: var(--green); border: 1px solid #22c55e44; }
+  .tag-cat { background: #f9731622; color: #f97316; border: 1px solid #f9731644; }
+
+  /* COMPARE TABLE */
+  table { width: 100%; border-collapse: collapse; font-size: 0.83rem; margin-top: 8px; }
+  th { background: #0f172a; color: var(--accent); padding: 8px 10px; text-align: left; font-weight: 700; font-size: 0.78rem; letter-spacing: .5px; }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--muted); vertical-align: top; }
+  td:first-child { color: var(--text); font-weight: 600; }
+  tr:last-child td { border-bottom: none; }
+
+  /* ACCORDION */
+  .accordion { margin-bottom: 8px; }
+  .acc-header {
+    background: #0f172a; border: 1px solid var(--border); border-radius: 8px;
+    padding: 12px 14px; cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+    font-weight: 600; font-size: 0.875rem; color: var(--text); transition: all .2s;
+  }
+  .acc-header:hover { border-color: var(--accent); }
+  .acc-header.open { border-color: var(--accent); border-radius: 8px 8px 0 0; color: var(--accent); }
+  .acc-arrow { transition: transform .2s; font-size: 0.75rem; color: var(--muted); }
+  .acc-header.open .acc-arrow { transform: rotate(180deg); color: var(--accent); }
+  .acc-body {
+    background: #0b1120; border: 1px solid var(--accent); border-top: none;
+    border-radius: 0 0 8px 8px; padding: 12px 14px; display: none; font-size: 0.85rem;
+    color: var(--muted); line-height: 1.7;
+  }
+  .acc-body.open { display: block; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">ECM<span> BAC1</span></div>
+    <div style="text-align:right">
+      <div class="exam-badge">🔥 EXAMEN MARDI</div>
+      <div style="font-size:0.7rem;color:var(--muted);margin-top:4px">7 leçons • Togo</div>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('accueil')">🏠 Accueil</div>
+    <div class="tab" onclick="showTab('l1')">L1 · Nationalité</div>
+    <div class="tab" onclick="showTab('l2')">L2 · Droits</div>
+    <div class="tab" onclick="showTab('l3')">L3 · Région</div>
+    <div class="tab" onclick="showTab('l4')">L4 · Entreprise</div>
+    <div class="tab" onclick="showTab('l5')">L5 · Genre</div>
+    <div class="tab" onclick="showTab('l6')">L6 · Droits humains</div>
+    <div class="tab" onclick="showTab('l7')">L7 · ONG</div>
+    <div class="tab" onclick="showTab('quiz')">⚡ Quiz</div>
+    <div class="tab" onclick="showTab('plan')">📅 Planning</div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ===================== ACCUEIL ===================== -->
+<div class="section active" id="accueil">
+  <div class="section-header">
+    <h2>RÉVISION EXPRESS</h2>
+    <p>Bac 1 ECM • Togo • Examen mardi 20 mai 2026</p>
+  </div>
+
+  <div class="card" style="border-color:var(--accent)">
+    <div class="card-title">⚠️ PRIORITÉS ABSOLUES <span class="badge badge-hot">À NE PAS RATER</span></div>
+    <ul class="list">
+      <li><strong>L1 Nationalité</strong> — Définition, 2 modes (attribution / acquisition), procédures, privilèges</li>
+      <li><strong>L2 Droits du citoyen</strong> — 4 générations de droits, devoirs envers l'État, définitions droit/liberté/devoir</li>
+      <li><strong>L5 Genre</strong> — Sexe vs Genre, vulnérabilités de la femme, moyens de promotion</li>
+      <li><strong>L6 Droits humains</strong> — Problèmes spécifiques : discrimination, ethnocentrisme, pauvreté, injustice, maltraitance</li>
+      <li><strong>L3 Région</strong> — Double identité, rôle du gouverneur, attributions de la région</li>
+    </ul>
+  </div>
+
+  <div class="home-grid">
+    <div class="home-card" onclick="showTab('l1')">
+      <div class="icon">🪪</div>
+      <div class="hc-title">Nationalité Togolaise</div>
+      <div class="hc-sub">Conditions, procédures, privilèges</div>
+    </div>
+    <div class="home-card" onclick="showTab('l2')">
+      <div class="icon">⚖️</div>
+      <div class="hc-title">Droits & Responsabilités</div>
+      <div class="hc-sub">4 catégories de droits, devoirs</div>
+    </div>
+    <div class="home-card" onclick="showTab('l3')">
+      <div class="icon">🏛️</div>
+      <div class="hc-title">Région / Décentralisation</div>
+      <div class="hc-sub">Gouverneur, DAGL, attributions</div>
+    </div>
+    <div class="home-card" onclick="showTab('l4')">
+      <div class="icon">🏢</div>
+      <div class="hc-title">Entrepreneuriat</div>
+      <div class="hc-sub">CFE, 10 étapes, opportunités</div>
+    </div>
+    <div class="home-card" onclick="showTab('l5')">
+      <div class="icon">♀️</div>
+      <div class="hc-title">Genre & Condition Femme</div>
+      <div class="hc-sub">Sexe vs genre, vulnérabilités</div>
+    </div>
+    <div class="home-card" onclick="showTab('l6')">
+      <div class="icon">🌍</div>
+      <div class="hc-title">Droits Humains</div>
+      <div class="hc-sub">Problèmes spécifiques, DUDH</div>
+    </div>
+    <div class="home-card" onclick="showTab('l7')">
+      <div class="icon">🤝</div>
+      <div class="hc-title">ONG & Défense</div>
+      <div class="hc-sub">Buts, actions, exemples Togo</div>
+    </div>
+    <div class="home-card" onclick="showTab('quiz')" style="border-color:var(--accent)">
+      <div class="icon">⚡</div>
+      <div class="hc-title">Quiz Examen</div>
+      <div class="hc-sub">15 questions • Style Bac</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== L1 NATIONALITÉ ===================== -->
+<div class="section" id="l1">
+  <div class="section-header">
+    <h2>LEÇON 1 — NATIONALITÉ</h2>
+    <p>Thème I · Conditions et procédures d'acquisition de la nationalité togolaise</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📌 Définitions clés <span class="badge badge-hot">RETENIR</span></div>
+    <div class="def"><strong>La nationalité</strong> : l'appartenance juridique d'une personne à la population d'un État.</div>
+    <div class="def"><strong>Le certificat de nationalité togolaise</strong> : document d'identité délivré par l'État togolais, produit par la <strong>DSNIC</strong> (Direction du Sceau, de la Nationalité et de l'Identité Civile). Durée de validité : <strong>illimitée</strong>.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔑 2 Modes d'obtention <span class="badge badge-key">CLÉ</span></div>
+    <div class="grid-2">
+      <div class="mini-card">
+        <div class="mini-title">1er mode : L'ATTRIBUTION</div>
+        <ul class="list">
+          <li><strong>Droit du sol</strong> — né au Togo de père et mère nés au Togo + résidence habituelle + possession d'état de Togolais</li>
+          <li><strong>Droit du sang</strong> — né d'un père togolais ; ou né d'une mère togolaise et d'un père sans nationalité</li>
+        </ul>
+      </div>
+      <div class="mini-card">
+        <div class="mini-title">2e mode : L'ACQUISITION</div>
+        <ul class="list">
+          <li><strong>Mariage</strong> — femme étrangère épousant un Togolais (droit de mariage)</li>
+          <li><strong>Naissance + résidence</strong> — né au Togo de parents étrangers, déclaration à 21 ans si résidence depuis 16 ans</li>
+          <li><strong>Décision autorité publique</strong> — naturalisation ou réintégration</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 Procédures <span class="badge badge-hot">CHIFFRES À SAVOIR</span></div>
+    <table>
+      <tr><th>Cas</th><th>Coût</th><th>Délai</th><th>Pièces principales</th></tr>
+      <tr><td>Naturalisation</td><td>15 000 FCFA</td><td>1 mois</td><td>Acte naissance, carte séjour 5 ans, certificat médical, renoncement nationalité d'origine</td></tr>
+      <tr><td>Mariage (Togolais × étranger)</td><td>5 000 FCFA</td><td>—</td><td>Déclaration naissance, certificat nationalité mari, certificat mariage</td></tr>
+      <tr><td>Parent togolais</td><td>5 000 FCFA</td><td>—</td><td>Acte naissance, photo, certificat nationalité père/frère/sœur</td></tr>
+      <tr><td>Enfants nés au Togo (parents togolais)</td><td>5 000 FCFA</td><td>9 mois</td><td>Acte naissance père+mère, jugement possession d'état, casier, enquête sociale</td></tr>
+      <tr><td>Enfants nés au Togo (parents étrangers)</td><td>5 000 FCFA</td><td>9 mois</td><td>Acte naissance, jugement possession d'état Togolais, casier, résidence</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✅ Privilèges liés à la nationalité togolaise</div>
+    <ul class="list">
+      <li>Droit de vote et d'éligibilité</li>
+      <li>Accès à la fonction publique</li>
+      <li>Obtenir une carte d'identité et un passeport</li>
+      <li>Protection consulaire à l'étranger</li>
+      <li>Accès à la sécurité sociale et à la justice</li>
+      <li>Droit à la santé, l'éducation et un travail décent</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ Perte / Déchéance de nationalité</div>
+    <div class="def">L'individu peut être <strong>déchu</strong> par décret s'il a été condamné au Togo ou à l'étranger pour un <strong>crime puni par la loi togolaise</strong> entraînant au moins <strong>5 ans d'emprisonnement</strong>.</div>
+    <div class="highlight" style="margin-top:8px">
+      <div class="highlight-title">CONDITIONS NATURALISATION (à ne pas remplir)</div>
+      Ne peut être naturalisé si : moins de 21 ans, résidence &lt; 5 ans au Togo, condamnation &gt; 2 ans, non sain de corps/esprit, n'a pas renoncé à sa nationalité d'origine, pas de connaissance d'une langue togolaise.
+    </div>
+  </div>
+</div>
+
+<!-- ===================== L2 DROITS ===================== -->
+<div class="section" id="l2">
+  <div class="section-header">
+    <h2>LEÇON 2 — DROITS & RESPONSABILITÉS</h2>
+    <p>Thème I · Droits et responsabilités du citoyen togolais</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📌 Définitions fondamentales <span class="badge badge-hot">RETENIR</span></div>
+    <div class="def"><strong>Un citoyen</strong> : personne qui relève de la protection et de l'autorité d'un État dont il est ressortissant.</div>
+    <div class="def"><strong>Le droit</strong> : ensemble des règles juridiques qui régissent les rapports entre les hommes vivant en société.</div>
+    <div class="def"><strong>La liberté</strong> : le fait d'agir dans une société sans faire l'objet de pression et sans nuire à autrui.</div>
+    <div class="def"><strong>Le devoir</strong> : obligation prescrite par la loi, la morale, la justice et les convenances.</div>
+    <div class="def"><strong>La responsabilité</strong> : le fait d'accomplir ses devoirs citoyens.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔑 4 Catégories de droits <span class="badge badge-key">CLÉ EXAMEN</span></div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span><span class="tag tag-1gen">1ère Génération</span> Droits civils et politiques</span>
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        <strong style="color:var(--blue)">Droits civils :</strong> prérogatives attachées à la personne.<br>
+        Exemples : droit à la vie, à la liberté, à l'égalité devant la loi, de ne pas être torturé, de ne pas être en esclavage, au mariage, à la liberté de pensée et de religion.
+        <br><br>
+        <strong style="color:var(--blue)">Droits politiques :</strong> libertés politiques garanties par le pays.<br>
+        Exemples : liberté d'opinion et d'expression, liberté de réunion, droit de vote, droit de prendre part aux affaires publiques.
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span><span class="tag tag-2gen">2ème Génération</span> Droits économiques, sociaux et culturels</span>
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        Droits garantissant des conditions de vie décentes.<br>
+        Exemples : droit à la santé, au travail, au libre choix de son travail, de s'affilier à des syndicats, de grève, à la sécurité sociale, aux loisirs, à un niveau de vie suffisant.
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span><span class="tag tag-3gen">3ème Génération</span> Droits novateurs / de solidarité</span>
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        Exemples : droit à un environnement sain, droit à la paix, droit au développement.
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span><span class="tag tag-cat">Catégoriels</span> Droits spécifiques</span>
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        — Droit de l'enfant<br>
+        — Droit de la femme<br>
+        — Droit des minorités
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 Devoirs du citoyen togolais</div>
+    <div class="grid-2">
+      <div class="mini-card">
+        <div class="mini-title">Envers lui-même</div>
+        <ul class="list">
+          <li>Entretenir son corps (hygiène)</li>
+          <li>Bien s'habiller et proprement</li>
+          <li>Respecter sa personne, culture, profession</li>
+          <li>Exécuter ses tâches</li>
+        </ul>
+      </div>
+      <div class="mini-card">
+        <div class="mini-title">Envers les autres</div>
+        <ul class="list">
+          <li>Respecter les droits et libertés du prochain</li>
+          <li>Renoncer à tout traitement inhumain et dégradant</li>
+          <li>Respecter la liberté d'association, de réunion</li>
+        </ul>
+      </div>
+      <div class="mini-card" style="grid-column:1/-1">
+        <div class="mini-title">Envers l'État togolais <span class="badge badge-hot" style="margin-left:6px">IMPORTANT</span></div>
+        <ul class="list">
+          <li>Payer les impôts, taxes et factures</li>
+          <li>Respecter les lois, règlements et la Constitution</li>
+          <li>Être assidu et ponctuel au service</li>
+          <li>Respecter et entretenir les biens publics</li>
+          <li>Avoir l'amour et la défense de la patrie</li>
+          <li>Participer au développement de son milieu</li>
+          <li>Participer au vote (c'est aussi un droit)</li>
+          <li>Protéger les biens publics</li>
+          <li>Préserver l'ordre social, la paix et la cohésion nationale</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== L3 RÉGION ===================== -->
+<div class="section" id="l3">
+  <div class="section-header">
+    <h2>LEÇON 3 — RÉGION</h2>
+    <p>Thème II · Décentralisation au Togo</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📌 Double identité de la région <span class="badge badge-hot">CLÉ</span></div>
+    <div class="grid-2">
+      <div class="mini-card">
+        <div class="mini-title">Circonscription administrative</div>
+        <div class="def" style="margin-top:6px">La région est une circonscription administrative de l'État dirigée par un <strong>gouverneur nommé par le président de la République</strong>. C'est une personne morale de droit public avec autonomie financière, composée de plusieurs préfectures.</div>
+      </div>
+      <div class="mini-card">
+        <div class="mini-title">Collectivité territoriale</div>
+        <div class="def" style="margin-top:6px">La région est une collectivité territoriale décentralisée dotée d'une autonomie financière, composée de plusieurs préfectures constituées de communes. Le gouverneur est assisté par un <strong>conseil régional</strong>.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏛️ Organisation administrative</div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span>Organisation (circumscription administrative)</span>
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        — Le gouverneur<br>
+        — Le secrétaire général de région<br>
+        — Les services techniques<br>
+        — La conférence administrative régionale
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span>Organisation (collectivité territoriale)</span>
+        <span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        — Le conseil régional<br>
+        — Le bureau exécutif du conseil régional<br>
+        — Les services techniques<br>
+        — Les commissions
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚙️ Attributions du gouverneur</div>
+    <ul class="list">
+      <li>Coordination des services</li>
+      <li>Participation aux délibérations du Conseil régional</li>
+      <li>Contrôle de la légalité des actes des collectivités territoriales</li>
+      <li>Supervision des projets de développement local</li>
+      <li>Contrôle de l'application des décisions gouvernementales</li>
+      <li>Construction et gestion des lycées et centres de formation</li>
+      <li>Élaboration et mise en œuvre du plan régional de développement</li>
+      <li>Planification régionale de l'urbanisation et des infrastructures</li>
+      <li>Gestion de l'ordre public</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📌 Attributions de la région & Stratégies</div>
+    <ul class="list">
+      <li>Aménagement du territoire</li>
+      <li>Développement économique</li>
+      <li>Formation professionnelle</li>
+      <li>Construction/entretien des lycées et hôpitaux régionaux</li>
+      <li>Gestion des transports</li>
+    </ul>
+    <div class="highlight" style="margin-top:10px">
+      <div class="highlight-title">STRATÉGIES DE DÉVELOPPEMENT</div>
+      Inventorier les ressources ; mettre en œuvre des plans de développement régional ; solliciter la participation de la population locale et des ressortissants ; développer des partenariats avec les ONG et d'autres régions.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏙️ District Autonome du Grand Lomé (DAGL)</div>
+    <div class="def">Entité territoriale particulière régie par des règles de décentralisation et de déconcentration, dont la gestion est <strong>fortement influencée par le pouvoir central</strong>.</div>
+    <div class="highlight" style="margin-top:8px">
+      <div class="highlight-title">BUREAU EXÉCUTIF DU DAGL</div>
+      — Un gouverneur (nommé par le Président de la République)<br>
+      — 3 vice-gouverneurs (nommés sur proposition du gouvernement)<br>
+      — Un secrétaire général + secrétaire général adjoint (arrêté du gouvernement parmi les conseillers)
+    </div>
+  </div>
+</div>
+
+<!-- ===================== L4 ENTREPRENEURIAT ===================== -->
+<div class="section" id="l4">
+  <div class="section-header">
+    <h2>LEÇON 4 — ENTREPRENEURIAT</h2>
+    <p>Thème III · Genre et développement · Élaboration de projet</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🏢 Création d'entreprise au Togo <span class="badge badge-hot">CFE</span></div>
+    <div class="def"><strong>CFE (Centre de Formalités des Entreprises)</strong> : guichet unique chargé de toutes les démarches de création d'entreprise au Togo. Situé au sein de la <strong>CCIT</strong> (Chambre de Commerce et d'Industrie du Togo). Tout individu (physique ou morale) peut créer une entreprise.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📋 10 Étapes pour monter un projet <span class="badge badge-key">CLÉ</span></div>
+    <ol style="padding-left:18px;font-size:0.875rem;color:var(--muted);line-height:2">
+      <li>Identifier la <strong style="color:var(--text)">problématique</strong> du projet</li>
+      <li>Définir les <strong style="color:var(--text)">objectifs et la raison d'être</strong></li>
+      <li>Déterminer les <strong style="color:var(--text)">résultats attendus</strong></li>
+      <li>Réaliser les <strong style="color:var(--text)">études de marché et de faisabilité</strong></li>
+      <li>Identifier les <strong style="color:var(--text)">parties prenantes clés</strong></li>
+      <li>Analyser et catégoriser les <strong style="color:var(--text)">risques</strong></li>
+      <li>Identifier les <strong style="color:var(--text)">contraintes</strong></li>
+      <li>Préparer un <strong style="color:var(--text)">plan de financement</strong> et un budget prévisionnel</li>
+      <li>Transformer le calendrier en <strong style="color:var(--text)">feuille de route</strong></li>
+      <li>Rédiger le <strong style="color:var(--text)">plan de projet</strong> (PMP)</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card-title">💡 Opportunités d'entrepreneuriat au Togo</div>
+    <ul class="list">
+      <li>Élevage (volailles, bovins, porcins, pisciculture)</li>
+      <li>Entrepreneuriat rural (agrobusiness, apiculture, plantes à haut rendement)</li>
+      <li>Quincaillerie (vente, transport matériaux de construction)</li>
+      <li>Transport (location voiture et moto, déménagement)</li>
+      <li>Vente de vêtements, chaussures, automobiles</li>
+      <li>Immobilier (construction, vente, location)</li>
+      <li>Commerce des produits agricoles</li>
+      <li>Maçonnerie, menuiserie, bâtiment</li>
+      <li>Restauration (cuisine domestique, traiteur)</li>
+      <li>Agences de voyage / tourisme</li>
+      <li>Artisanat</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== L5 GENRE ===================== -->
+<div class="section" id="l5">
+  <div class="section-header">
+    <h2>LEÇON 5 — GENRE & CONDITION FEMME</h2>
+    <p>Thème III · Genre et développement</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚡ Sexe vs Genre <span class="badge badge-hot">TRÈS IMPORTANT</span></div>
+    <table>
+      <tr><th>Critère</th><th>SEXE</th><th>GENRE</th></tr>
+      <tr><td>Nature</td><td>Biologique, inné, héréditaire</td><td>Sociologique, construction sociale</td></tr>
+      <tr><td>Définition</td><td>Différences biologiques entre hommes et femmes</td><td>Différences sociales entre hommes et femmes</td></tr>
+      <tr><td>Composantes</td><td>Anatomie, hormones, chromosomes, gonades</td><td>Comportements, attitudes, rôles liés au contexte historique et socioculturel</td></tr>
+      <tr><td>Irréversible ?</td><td>Oui</td><td>Non — varie d'une société à l'autre, muable</td></tr>
+    </table>
+    <div class="highlight" style="margin-top:10px">
+      <div class="highlight-title">RETENIR</div>
+      <strong>Le sexe est biologique. Le genre est sociologique (une construction sociale).</strong>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ Vulnérabilités de la femme <span class="badge badge-key">CLÉ</span></div>
+    <ul class="list">
+      <li><strong>Biologique</strong> — généralement plus faible physiquement par rapport à l'homme</li>
+      <li><strong>Politique</strong> — très peu présente dans les instances de décision ; peu impliquée en politique</li>
+      <li><strong>Économique</strong> — faible accès aux moyens de production, aux ressources et opportunités économiques</li>
+      <li><strong>Sociale</strong> — rôle essentiellement domestique dans la famille, statut inférieur à l'homme, valorisée par le mariage et la fécondité, taux d'alphabétisation faible, scolarisation négligée</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🚀 Moyens de promotion du genre</div>
+    <ul class="list">
+      <li><strong>Égalité de chance</strong> — même statut, mêmes droits, mêmes devoirs et aptitudes pour contribuer au développement</li>
+      <li><strong>Équité de genre</strong> — traitement juste, répartition juste des résultats et bénéfices entre H et F</li>
+      <li><strong>Non-discrimination</strong> — considérer tous les humains, H et F, comme égaux sans distinction de sexe</li>
+      <li><strong>Mixité</strong> — comprendre ou recevoir des personnes des deux sexes dans les formations, écoles, services de l'État</li>
+      <li><strong>Parité</strong> — égalité parfaite entre H et F sur les lieux de travail</li>
+      <li><strong>Complémentarité</strong> — malgré leurs différences, H et F se complètent pour l'harmonie dans la société</li>
+      <li><strong>Discrimination positive</strong> — actions préférentielles pour éliminer une inégalité passée (ex: gratuité des frais de scolarité pour les filles au Togo)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📈 Impacts de la promotion du genre sur le développement</div>
+    <ul class="list">
+      <li><strong>Participation équitable à la production des biens</strong> — accès de la femme aux fonctions contribue à la richesse nationale</li>
+      <li><strong>Complémentarité dans la production de richesses</strong> — l'activité de la femme complète celle de l'homme</li>
+      <li><strong>Partage des charges familiales</strong> — lorsque la femme a des revenus, elle contribue aux charges familiales</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== L6 DROITS HUMAINS ===================== -->
+<div class="section" id="l6">
+  <div class="section-header">
+    <h2>LEÇON 6 — DROITS HUMAINS</h2>
+    <p>Thème IV · Problèmes spécifiques liés aux droits humains</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📌 Définitions clés <span class="badge badge-hot">RETENIR</span></div>
+    <div class="def"><strong>Les droits humains (droits de l'homme)</strong> : ensemble des droits et des libertés de chaque individu du seul fait de sa nature humaine.</div>
+    <div class="def"><strong>Les problèmes spécifiques liés aux droits humains</strong> : difficultés qui empêchent le respect des droits humains. Ils s'opposent au <strong>principe de l'égalité</strong> prôné par la DUDH (art. 1er et 2).</div>
+    <div class="highlight" style="margin-top:8px">
+      <div class="highlight-title">DUDH — À RETENIR</div>
+      Art. 1er : « Tous les êtres humains naissent libres et égaux en dignité et en droits »<br>
+      Art. 2 : Jouissance de tous les droits sans distinction de race, couleur, sexe, langue, religion, opinion politique ou d'origine nationale.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ Les 6 problèmes spécifiques <span class="badge badge-key">CLÉ EXAMEN</span></div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span>a) L'ethnocentrisme</span><span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        Tendance à privilégier son propre groupe social en prenant sa propre culture comme référence. Conduit à des préjugés sur les autres groupes, voire au racisme.<br>
+        <strong style="color:var(--blue)">Exemple au Togo :</strong> conflits de Dankpen en 2017 entre Ife et Kabyé, de Sodo entre Ewé et Kabyé.
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span>b) La discrimination</span><span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        Distinction, isolement ou ségrégation d'un individu ou groupe par rapport à un ensemble plus large, basée sur des critères subjectifs (rang social, sexe, pratiques sexuelles, âge, origine sociale, religion, etc.).<br>
+        Porte atteinte à l'égalité des droits et des chances. Représente une injustice.<br>
+        <strong style="color:var(--blue)">Exemple :</strong> interdiction à certains d'avoir accès aux bourses d'études, à la promotion, à l'emploi, à l'embauche.
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span>c) La pauvreté</span><span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        Situation d'une personne ne disposant pas de ressources suffisantes pour vivre dignement. Ce n'est pas uniquement le manque d'argent, mais aussi manque d'accès à l'éducation, au travail valorisant, aux biens et choses nécessaires à la vie.<br>
+        <strong style="color:var(--blue)">Exemple :</strong> un citoyen ne pouvant pas s'offrir plus d'un repas par jour ; un enfant mineur obligé de travailler pour nourrir ses parents.
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span>d) L'injustice</span><span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        Acte ou fait ne respectant pas les règles de l'équité. On distingue 3 formes :<br>
+        — <strong style="color:var(--blue)">Injustice politique</strong> : le cercle des intéressés par une décision politique est plus grand que le cercle de ceux qui ont le droit de participer.<br>
+        — <strong style="color:var(--blue)">Injustice socio-économique</strong> : distribution des biens produits par le travail jugée inéquitable.<br>
+        — <strong style="color:var(--blue)">Injustice culturelle</strong> : une personne se sent méprisée selon son appartenance identitaire.
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span>e) La maltraitance</span><span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        Mauvais traitement (occasionnel, durable ou répété) infligé à une personne (ou groupe) qu'on traite avec violence, mépris ou indignité. Formes : maltraitance physique, psychologique, sexuelle.<br>
+        Porte atteinte aux droits et besoins fondamentaux de l'individu.<br>
+        <strong style="color:var(--blue)">Exemple :</strong> un enseignant qui donne des exercices exagérés aux apprenants.
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span>f) La dégradation de l'environnement</span><span class="acc-arrow">▼</span>
+      </div>
+      <div class="acc-body">
+        Les activités humaines ont des répercussions sur l'environnement, modifient le sol et l'habitat, font disparaître les ressources. L'homme a le droit de vivre dans un cadre sain — c'est un droit de la 3ème génération.<br>
+        Dégrader l'environnement = violer les droits humains.<br>
+        <strong style="color:var(--blue)">Exemple :</strong> création de dépotoirs sauvages dans les quartiers résidentiels.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== L7 ONG ===================== -->
+<div class="section" id="l7">
+  <div class="section-header">
+    <h2>LEÇON 7 — ONG & DÉFENSE</h2>
+    <p>Organisations de défense des droits humains</p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">📌 Définitions <span class="badge badge-hot">RETENIR</span></div>
+    <div class="def"><strong>ONG</strong> : organisation qui ne reçoit aucune subvention de l'État, constituée dans un intérêt public ou dans un but humanitaire. <span style="color:var(--muted)">But non lucratif.</span></div>
+    <div class="def"><strong>Association</strong> : groupement permanent de personnes mettant en commun leurs connaissances ou activités dans un but non lucratif. Elles sont considérées comme des ONG si elles sont apolitiques et amorales.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🎯 Buts des organisations de défense des droits humains</div>
+    <ul class="list">
+      <li>Promouvoir les droits de l'homme et du peuple</li>
+      <li>Venir en aide aux victimes de guerre</li>
+      <li>Soutenir les défenseurs des droits de l'homme</li>
+      <li>Promouvoir et protéger les droits de toute personne vulnérable</li>
+      <li>Promouvoir une justice effective et lutter contre l'impunité</li>
+      <li>Soutenir la démocratie</li>
+      <li>Promouvoir un monde respectueux des droits humains</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚡ Actions des organisations</div>
+    <ul class="list">
+      <li>Dénonciation des cas de violation des droits humains</li>
+      <li>Établissement des faits via missions d'enquête et d'observation judiciaire</li>
+      <li>Soutien de la société civile par des formations et échanges</li>
+      <li>Mobilisation de la communauté des États</li>
+      <li>Lobbyings et plaidoyers</li>
+      <li>Intervention dans les zones de conflit</li>
+      <li>Engagement des poursuites judiciaires</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🇹🇬 Exemples d'organisations au Togo & monde</div>
+    <div class="highlight">
+      <div class="highlight-title">AU TOGO</div>
+      • AVOTODE (Association des Volontaires Togolaises et Togolais pour le Développement)<br>
+      • ESPOIR VIE TOGO<br>
+      • GDG LOMÉ (Groupe de Développement Google)<br>
+      • AJA (ONG) — Agriculture, environnement, droits humains, décentralisation — créée 30 mai 1998<br>
+      • AAE (Association) — Santé, éducation, agriculture — 2009<br>
+      • APRODIFE (ONG) — Éducation aux droits humains, entrepreneuriat — 2008
+    </div>
+    <div class="highlight" style="margin-top:8px">
+      <div class="highlight-title">INTERNATIONALES</div>
+      • PNUD (Programme des Nations Unies pour le Développement)<br>
+      • FAPE (Fédération Africaine des Associations des Parents d'Élèves et Étudiants)<br>
+      • Amnesty International
+    </div>
+  </div>
+</div>
+
+<!-- ===================== QUIZ ===================== -->
+<div class="section" id="quiz">
+  <div class="section-header">
+    <h2>QUIZ EXAMEN</h2>
+    <p>15 questions style Bac 1 ECM Togo · Réponds puis vérifie</p>
+  </div>
+
+  <div id="quiz-container"></div>
+  <div id="quiz-score">
+    <div class="score-num" id="score-num">0/15</div>
+    <p id="score-msg">Continue à réviser !</p>
+    <button class="btn" onclick="resetQuiz()">🔄 Recommencer</button>
+  </div>
+</div>
+
+<!-- ===================== PLANNING ===================== -->
+<div class="section" id="plan">
+  <div class="section-header">
+    <h2>PLANNING 2 JOURS</h2>
+    <p>Optimisé pour viser 15/20 au Bac 1 ECM · Examen mardi</p>
+  </div>
+
+  <div class="card" style="border-color:var(--red)">
+    <div class="card-title">⚡ Stratégie</div>
+    <ul class="list">
+      <li><strong>Dimanche</strong> — Fiches + mémorisation des définitions et catégories</li>
+      <li><strong>Lundi</strong> — Quiz + révision des points faibles + schémas mentaux</li>
+      <li><strong>Mardi matin</strong> — Révision express des définitions clés uniquement</li>
+    </ul>
+  </div>
+
+  <div class="planning-day">
+    <div class="day-label">📅 DIMANCHE — Apprentissage</div>
+    <div class="task">
+      <div class="task-time">08h00<br>—<br>09h30</div>
+      <div class="task-content">
+        <strong>L1 Nationalité</strong>
+        <span>Définitions nationalité + DSNIC · 2 modes (attribution/acquisition) · Privilèges</span>
+      </div>
+    </div>
+    <div class="task">
+      <div class="task-time">09h30<br>—<br>11h00</div>
+      <div class="task-content">
+        <strong>L2 Droits & Responsabilités</strong>
+        <span>4 catégories de droits (1G civils-politiques / 2G éco-sociaux / 3G solidarité / catégoriels) · Devoirs envers l'État</span>
+      </div>
+    </div>
+    <div class="task">
+      <div class="task-time">11h00<br>—<br>11h15</div>
+      <div class="task-content" style="color:var(--green)"><strong>☕ Pause</strong></div>
+    </div>
+    <div class="task">
+      <div class="task-time">11h15<br>—<br>12h30</div>
+      <div class="task-content">
+        <strong>L5 Genre & Femme</strong>
+        <span>Sexe vs Genre (tableau) · 4 vulnérabilités · 7 moyens de promotion</span>
+      </div>
+    </div>
+    <div class="task">
+      <div class="task-time">14h00<br>—<br>15h30</div>
+      <div class="task-content">
+        <strong>L6 Problèmes droits humains</strong>
+        <span>DUDH art.1 et 2 · 6 problèmes : ethnocentrisme, discrimination, pauvreté, injustice, maltraitance, dégradation environnement</span>
+      </div>
+    </div>
+    <div class="task">
+      <div class="task-time">15h30<br>—<br>16h30</div>
+      <div class="task-content">
+        <strong>L3 Région + L7 ONG</strong>
+        <span>Double identité région · Gouverneur · Attributions · Définition ONG/association · Buts et actions</span>
+      </div>
+    </div>
+    <div class="task">
+      <div class="task-time">16h30<br>—<br>17h00</div>
+      <div class="task-content">
+        <strong>L4 Entrepreneuriat</strong>
+        <span>CFE · 10 étapes · Opportunités Togo</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="planning-day">
+    <div class="day-label">📅 LUNDI — Consolidation</div>
+    <div class="task">
+      <div class="task-time">08h00<br>—<br>09h00</div>
+      <div class="task-content">
+        <strong>⚡ Quiz complet (ce site)</strong>
+        <span>Faire tous les quiz · Identifier les erreurs</span>
+      </div>
+    </div>
+    <div class="task">
+      <div class="task-time">09h00<br>—<br>10h30</div>
+      <div class="task-content">
+        <strong>Révision ciblée des erreurs</strong>
+        <span>Relire uniquement les fiches où tu as échoué au quiz</span>
+      </div>
+    </div>
+    <div class="task">
+      <div class="task-time">10h30<br>—<br>12h00</div>
+      <div class="task-content">
+        <strong>Exercice rédaction</strong>
+        <span>Entraîne-toi à répondre aux situations d'intégration (style examen ECM)</span>
+      </div>
+    </div>
+    <div class="task">
+      <div class="task-time">14h00<br>—<br>15h00</div>
+      <div class="task-content">
+        <strong>Mémorisation flash — définitions</strong>
+        <span>Droit, liberté, devoir, responsabilité, nationalité, sexe, genre, ONG, ethnocentrisme, discrimination, pauvreté</span>
+      </div>
+    </div>
+    <div class="task">
+      <div class="task-time">15h00<br>—<br>15h30</div>
+      <div class="task-content" style="color:var(--green)"><strong>✅ Repos — Tu es prêt(e)</strong><span>Dors tôt ce soir</span></div>
+    </div>
+  </div>
+
+  <div class="planning-day">
+    <div class="day-label">🔥 MARDI MATIN — Examen</div>
+    <div class="task">
+      <div class="task-time">06h00<br>—<br>07h00</div>
+      <div class="task-content">
+        <strong>Révision express ultime</strong>
+        <span>Relire uniquement : définitions clés · 2 modes nationalité · 4 catégories droits · Sexe vs Genre · 6 problèmes droits humains</span>
+      </div>
+    </div>
+    <div class="task">
+      <div class="task-time">Examen</div>
+      <div class="task-content" style="color:var(--accent)">
+        <strong>🏆 Vise 15/20 — Tu as les outils</strong>
+        <span>Lis bien la situation d'intégration · Structure ta réponse · Définis toujours les termes clés</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:var(--green)">
+    <div class="card-title">💡 Conseils examen ECM</div>
+    <ul class="list">
+      <li><strong>Toujours définir</strong> les termes clés avant de répondre</li>
+      <li>Structurer avec des <strong>titres et sous-titres</strong></li>
+      <li>Donner des <strong>exemples concrets</strong> liés au Togo</li>
+      <li>La situation d'intégration = répondre à 2-3 consignes précises</li>
+      <li>Soigner l'introduction et la conclusion</li>
+    </ul>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ============================================================
+// LOCALSTORAGE — persistence hors ligne
+// ============================================================
+const LS_TAB    = 'ecm_last_tab';
+const LS_ANS    = 'ecm_quiz_answers';
+const LS_BUILT  = 'ecm_quiz_built';
+
+function lsSave(key, val) {
+  try { localStorage.setItem(key, JSON.stringify(val)); } catch(e) {}
+}
+function lsLoad(key, def) {
+  try { const v = localStorage.getItem(key); return v !== null ? JSON.parse(v) : def; } catch(e) { return def; }
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const map = {accueil:0,l1:1,l2:2,l3:3,l4:4,l5:5,l6:6,l7:7,quiz:8,plan:9};
+  document.querySelectorAll('.tab')[map[id]]?.classList.add('active');
+  lsSave(LS_TAB, id);
+  if (id === 'quiz') buildQuiz();
+}
+
+// ============================================================
+// ACCORDION
+// ============================================================
+function toggleAcc(header) {
+  const body = header.nextElementSibling;
+  const isOpen = header.classList.contains('open');
+  header.classList.toggle('open', !isOpen);
+  body.classList.toggle('open', !isOpen);
+}
+
+// ============================================================
+// QUIZ DATA
+// ============================================================
+const questions = [
+  {
+    q: "Qu'est-ce que la nationalité ?",
+    opts: ["Un document d'identité délivré par l'État","L'appartenance juridique d'une personne à la population d'un État","Le droit de vote dans un pays","Un passeport international"],
+    ans: 1,
+    exp: "La nationalité est l'appartenance juridique d'une personne à la population d'un État. Le certificat de nationalité est le document qui la prouve."
+  },
+  {
+    q: "Quelle institution délivre le certificat de nationalité togolaise ?",
+    opts: ["La Mairie de Lomé","Le Ministère de l'Intérieur","La DSNIC (Direction du Sceau, de la Nationalité et de l'Identité Civile)","La CCIT"],
+    ans: 2,
+    exp: "La DSNIC (Direction du Sceau, de la Nationalité et de l'Identité Civile) produit le certificat de nationalité togolaise, qui a une durée de validité illimitée."
+  },
+  {
+    q: "Le droit du sol signifie qu'on est Togolais parce que...",
+    opts: ["On est né d'un père togolais","On est né au Togo de père et mère nés au Togo avec résidence habituelle","On a épousé un(e) Togolais(e)","On a vécu 5 ans au Togo"],
+    ans: 1,
+    exp: "Le droit du sol = naissance au Togo + père et mère nés au Togo + résidence habituelle sur le territoire + possession d'état de Togolais."
+  },
+  {
+    q: "Quel est le coût d'une procédure de naturalisation au Togo ?",
+    opts: ["5 000 FCFA","1 000 FCFA","15 000 FCFA","10 000 FCFA"],
+    ans: 2,
+    exp: "La naturalisation coûte 15 000 FCFA au Togo avec un délai d'exécution de 1 mois."
+  },
+  {
+    q: "Les droits de la 1ère génération sont appelés droits...",
+    opts: ["Économiques, sociaux et culturels","Novateurs ou de solidarité","Civils et politiques","Catégoriels ou spécifiques"],
+    ans: 2,
+    exp: "Les droits de la 1ère génération sont les droits civils et politiques. Exemples : droit à la vie, liberté d'expression, droit de vote."
+  },
+  {
+    q: "Le droit à un environnement sain appartient à quelle génération ?",
+    opts: ["1ère génération","2ème génération","3ème génération","Droits catégoriels"],
+    ans: 2,
+    exp: "Les droits de la 3ème génération (droits novateurs ou de solidarité) comprennent : droit à un environnement sain, droit à la paix, droit au développement."
+  },
+  {
+    q: "Quelle est la différence fondamentale entre le sexe et le genre ?",
+    opts: ["Le sexe est social, le genre est biologique","Le sexe est biologique et inné ; le genre est sociologique, une construction sociale","Ils sont identiques","Le sexe est muable, le genre est irréversible"],
+    ans: 1,
+    exp: "Le sexe est biologique, inné, héréditaire et irréversible. Le genre est une construction sociale liée aux conditions historiques et socioculturelles — il est muable et réversible."
+  },
+  {
+    q: "Laquelle de ces propositions est une vulnérabilité POLITIQUE de la femme ?",
+    opts: ["La femme est généralement plus faible physiquement","Le rôle de la femme est essentiellement domestique","Les femmes sont très peu présentes dans les instances de décision","Les femmes ont faiblement accès aux moyens de production"],
+    ans: 2,
+    exp: "La vulnérabilité politique = les femmes sont très peu présentes dans les instances de décision et peu impliquées en politique."
+  },
+  {
+    q: "La discrimination positive au Togo se manifeste par exemple par...",
+    opts: ["L'interdiction des femmes dans la fonction publique","La gratuité des frais de scolarité pour les filles","Le droit de vote réservé aux hommes","L'obligation de mariage pour les femmes"],
+    ans: 1,
+    exp: "Exemple de discrimination positive au Togo : avant la gratuité des frais de scolarité, il y avait une réduction des frais scolaires en faveur des filles pour améliorer l'égalité de chance."
+  },
+  {
+    q: "L'ethnocentrisme, c'est...",
+    opts: ["Le respect de toutes les cultures","La tendance à privilégier son groupe social en prenant sa propre culture comme référence","La discrimination basée sur le revenu","Un droit de la 3ème génération"],
+    ans: 1,
+    exp: "L'ethnocentrisme est la tendance à privilégier le groupe social auquel on appartient en prenant sa propre culture comme référence, ce qui conduit à des préjugés et potentiellement au racisme."
+  },
+  {
+    q: "Quelle institution est le guichet unique pour créer une entreprise au Togo ?",
+    opts: ["La DSNIC","La CCIT seule","Le CFE (Centre de Formalités des Entreprises)","Le Ministère du Commerce"],
+    ans: 2,
+    exp: "Le CFE (Centre de Formalités des Entreprises) est le guichet unique chargé de toutes les démarches de création d'entreprise au Togo. Il est situé au sein de la CCIT."
+  },
+  {
+    q: "La région en tant que collectivité territoriale est dirigée par...",
+    opts: ["Un maire élu","Un gouverneur nommé par le président, assisté d'un conseil régional","Un préfet nommé par le ministre","Un directeur régional"],
+    ans: 1,
+    exp: "En tant que collectivité territoriale, la région est dirigée par un gouverneur assisté par un conseil régional. En tant que circonscription administrative, le gouverneur est nommé par le président de la République."
+  },
+  {
+    q: "Qu'est-ce qu'une ONG ?",
+    opts: ["Une organisation financée par l'État","Une organisation qui ne reçoit aucune subvention de l'État, dans un but humanitaire à but non lucratif","Une entreprise privée internationale","Un parti politique international"],
+    ans: 1,
+    exp: "Une ONG est une organisation qui ne reçoit aucune subvention de l'État, constituée dans un intérêt public ou but humanitaire, à but non lucratif."
+  },
+  {
+    q: "Quelle est la peine minimum pour être déchu de la nationalité togolaise ?",
+    opts: ["2 ans d'emprisonnement","3 ans d'emprisonnement","5 ans d'emprisonnement","10 ans d'emprisonnement"],
+    ans: 2,
+    exp: "L'individu peut être déchu de la nationalité togolaise s'il a été condamné pour un crime par la loi togolaise entraînant une peine d'au moins 5 ans d'emprisonnement."
+  },
+  {
+    q: "Selon la DUDH, l'article 1er stipule que...",
+    opts: ["Tous les droits sont réservés aux citoyens","Tous les êtres humains naissent libres et égaux en dignité et en droits","Seuls les adultes ont des droits","Les droits sont accordés par l'État"],
+    ans: 1,
+    exp: "Article 1er de la DUDH : « Tous les êtres humains naissent libres et égaux en dignité et en droits ». C'est le principe fondamental de l'égalité."
+  }
+];
+
+// ============================================================
+// QUIZ — avec localStorage
+// ============================================================
+let answers = lsLoad(LS_ANS, new Array(questions.length).fill(null));
+let quizBuilt = false;
+
+function buildQuiz() {
+  if (quizBuilt) return;
+  quizBuilt = true;
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = '';
+
+  questions.forEach((q, i) => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.id = 'qcard-' + i;
+    card.innerHTML = `
+      <div class="quiz-q">
+        <span class="qnum">QUESTION ${i+1}/15</span>
+        ${q.q}
+      </div>
+      <div class="options" id="opts-${i}">
+        ${q.opts.map((o, j) => `<button class="option" id="opt-${i}-${j}" onclick="answer(${i},${j})">${String.fromCharCode(65+j)}. ${o}</button>`).join('')}
+      </div>
+      <div class="explanation" id="exp-${i}"><strong>✅ Explication :</strong> ${q.exp}</div>
+    `;
+    container.appendChild(card);
+  });
+
+  // Restaurer les réponses sauvegardées
+  answers.forEach((a, i) => {
+    if (a !== null) renderAnswer(i, a);
+  });
+
+  // Afficher le score si tout est déjà répondu
+  if (answers.every(a => a !== null)) showScore();
+}
+
+function answer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  lsSave(LS_ANS, answers); // 💾 Sauvegarde localStorage
+  renderAnswer(qi, oi);
+  if (answers.every(a => a !== null)) showScore();
+}
+
+function renderAnswer(qi, oi) {
+  const opts = document.querySelectorAll(`#opts-${qi} .option`);
+  opts.forEach((o, j) => {
+    o.disabled = true;
+    if (j === questions[qi].ans) o.classList.add('correct');
+    else if (j === oi && oi !== questions[qi].ans) o.classList.add('wrong');
+  });
+  document.getElementById('exp-' + qi).classList.add('show');
+}
+
+function showScore() {
+  const correct = answers.filter((a, i) => a === questions[i].ans).length;
+  const scoreDiv = document.getElementById('quiz-score');
+  const scoreNum = document.getElementById('score-num');
+  const scoreMsg = document.getElementById('score-msg');
+  scoreDiv.style.display = 'block';
+  scoreNum.textContent = correct + '/15';
+  if (correct >= 13) scoreMsg.textContent = '🔥 Excellent ! Tu vises le 17-18/20 à l\'examen !';
+  else if (correct >= 10) scoreMsg.textContent = '👍 Bon niveau ! Révise les erreurs pour viser 15/20.';
+  else if (correct >= 7) scoreMsg.textContent = '📚 Continue ! Relis les fiches et refais le quiz.';
+  else scoreMsg.textContent = '💪 Relis toutes les fiches, tu peux faire beaucoup mieux !';
+  // Sauvegarder le score
+  lsSave('ecm_last_score', correct + '/15');
+}
+
+function resetQuiz() {
+  answers = new Array(questions.length).fill(null);
+  lsSave(LS_ANS, answers);
+  lsSave('ecm_last_score', null);
+  quizBuilt = false;
+  document.getElementById('quiz-score').style.display = 'none';
+  buildQuiz();
+}
+
+// ============================================================
+// INIT — restaurer la dernière tab visitée
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  const lastTab = lsLoad(LS_TAB, 'accueil');
+  showTab(lastTab);
+
+  // Badge score si déjà fait
+  const lastScore = lsLoad('ecm_last_score', null);
+  if (lastScore) {
+    const badge = document.createElement('div');
+    badge.style.cssText = 'font-size:0.7rem;color:var(--green);margin-top:4px;font-weight:700;';
+    badge.textContent = '✅ Dernier quiz : ' + lastScore;
+    document.querySelector('.header-inner > div:last-child').appendChild(badge);
+  }
+});
+</script>
+</body>
+</html>
